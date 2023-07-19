@@ -1,6 +1,7 @@
+const { CustomError } = require("../middleware/errorHandler");
 const Case = require("../model/Case.model");
 
-const getAllCases = async (req, res, next) => {
+const getCases = async (req, res, next) => {
   try {
     const cases = await Case.find({});
     res.status(200).json({
@@ -12,6 +13,17 @@ const getAllCases = async (req, res, next) => {
   }
 };
 
+const addCase = async (req, res, next) => {
+  const newCase = new Case(req.body);
+  try {
+    await newCase.save();
+    res.status(200).json(newCase);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
-  getAllCases,
+  getCases,
+  addCase,
 };

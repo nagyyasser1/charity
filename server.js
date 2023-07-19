@@ -1,22 +1,23 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 require("dotenv").config();
 const connectDB = require("./config/db");
 const caseRouter = require("./routes/case.router");
+const { errorHandler } = require("./middleware/errorHandler");
+const notFound = require("./middleware/notFound");
+const rateLimiter = require("./middleware/rateLimit");
+const morgan = require("morgan");
+
+app.use(rateLimiter);
+app.use(morgan("dev"));
+app.use(express.json());
 
 app.use("/api/v1/case", caseRouter);
-app.get("/", (req, res, next) => {
-  next({ message: "/ not recommended" }); // Express will catch this on its own.
+app.use("/", (req, res, next) => {
+  res.send("running");
 });
-
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || "Something Went Worng!";
-  console.error(err.stack);
-  res.status(500).json({
-    status,
-    message,
-  });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 connectDB()
   .then(() => {

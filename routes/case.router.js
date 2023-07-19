@@ -1,6 +1,8 @@
 const router = require("express").Router();
-const { getAllCases } = require("../controller/case.controller");
+const { getCases, addCase } = require("../controller/case.controller");
+const { validateCaseData } = require("../middleware/caseDataValidation");
 
-router.get("/", getAllCases);
+router.get("/", getCases);
+router.post("/", validateCaseData, addCase);
 
 module.exports = router;

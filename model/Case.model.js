@@ -1,85 +1,156 @@
 const mongoose = require("mongoose");
 
-const caseSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: mongoose.Types.ObjectId,
-  },
-  firstname: {
-    type: String,
-    required: true,
-  },
-  midname: {
-    type: String,
-    required: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: ["poor", "widows", "orphans"],
-  },
-  phone: {
-    type: [Number],
-    required: true,
-  },
-  deserve: {
-    type: String,
-    required: true,
-    enum: ["yes", "no", "wating"],
-  },
-  salary: {
-    type: Number,
-    required: true,
-    min: 200,
-    max: 500,
-  },
-  box: {
-    type: Number,
-    default: 1,
-  },
-  checkDate: {
-    type: Date,
-    required: true,
-  },
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  birthdate: {
-    type: Date,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  town: {
-    type: String,
-    required: true,
-  },
-  street: {
-    type: String,
-    required: true,
-  },
-  document: [String],
-  dependent: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Dependent",
+const caseSchema = new mongoose.Schema(
+  {
+    ssh: {
+      type: Number,
+      unique: true,
+      required: true,
     },
-  ],
-  researchOpinions: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ResearchOpinion",
+    document: {
+      type: [String],
+      required: false,
     },
-  ],
+    dependent: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Dependent",
+      },
+    ],
+    researchOpinions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ResearchOpinion",
+      },
+    ],
+  },
+  { strict: false }
+);
+
+caseSchema.pre("save", function (next) {
+  if (!this.document || this.document.length === 0) {
+    this.document = undefined;
+  }
+  next();
 });
 
-const Case = mongoose.model("Case", caseSchema);
+caseSchema.pre("save", function (next) {
+  if (!this.dependent || this.dependent.length === 0) {
+    this.dependent = undefined;
+  }
+  next();
+});
+
+caseSchema.pre("save", function (next) {
+  if (!this.researchOpinions || this.researchOpinions.length === 0) {
+    this.researchOpinions = undefined;
+  }
+  next();
+});
+
+const Case = mongoose.model("Caseeee", caseSchema);
 
 module.exports = Case;
+
+// const mongoose = require("mongoose");
+
+// const caseSchema = new mongoose.Schema(
+//   {
+//     // midname: {
+//     //   type: String,
+//     // },
+//     // lastname: {
+//     //   type: String,
+//     // },
+//     // status: {
+//     //   type: String,
+//     //   enum: ["poor", "widows", "orphans"],
+//     // },
+//     // sponsor: {
+//     //   type: String,
+//     //   enum: ["factory", "special", "foundation"],
+//     // },
+//     // deserve: {
+//     //   type: String,
+//     //   enum: ["yes", "no", "wating"],
+//     // },
+//     // phone: {
+//     //   type: [Number],
+//     // },
+//     // salary: {
+//     //   type: Number,
+//     // },
+//     // box: {
+//     //   type: Number,
+//     //   default: 1,
+//     // },
+//     // checkDate: {
+//     //   type: Date,
+//     // },
+//     // startDate: {
+//     //   type: Date,
+//     // },
+//     // birthdate: {
+//     //   type: Date,
+//     // },
+//     // description: {
+//     //   type: String,
+//     // },
+//     // town: {
+//     //   type: String,
+//     // },
+//     // street: {
+//     //   type: String,
+//     // },
+//     ssh:{
+//       type:Number,
+//       unique:true
+
+//     },
+//     document: {
+//       // required: function () {
+//       //   return typeof this.sponsor !== "undefined";
+//       // },
+//       type: [String],
+//       required: false,
+//     },
+//     dependent: [
+//       {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "Dependent",
+//       },
+//     ],
+//     researchOpinions: [
+//       {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "ResearchOpinion",
+//       },
+//     ],
+//   },
+//   { strict: false }
+// );
+
+// caseSchema.pre("save", function (next) {
+//   if (!this.document || this.document.length === 0) {
+//     this.document = undefined;
+//   }
+//   next();
+// });
+
+// caseSchema.pre("save", function (next) {
+//   if (!this.dependent || this.dependent.length === 0) {
+//     this.dependent = undefined;
+//   }
+//   next();
+// });
+
+// caseSchema.pre("save", function (next) {
+//   if (!this.researchOpinions || this.researchOpinions.length === 0) {
+//     this.researchOpinions = undefined;
+//   }
+//   next();
+// });
+
+// const Case = mongoose.model("Case", caseSchema);
+
+// module.exports = Case;
