@@ -1,0 +1,42 @@
+{
+  "SSH": 90010000,
+  "FirstName": "new case",
+  "MidName": "saber",
+  "LastName": "Mahmoud",
+  "SocialStatus": "orphans",
+  "Sector": "foundation",
+  "ApprovalStatus": "yes",
+  "Phone": "77777777777",
+  "CashBenefits": 11,
+  "Box": 3,
+  "CheckDate": "2023-07-23",
+  "StartDate": "2023-07-23",
+  "Birthdate": "2023-07-23",
+  "Description": "mamama",
+  "Town": "gaga",
+  "Street": "lsdkfj",
+  "MonthlyIncome": 111,
+  "MonthlyOutcome": 1112,
+  "Dependent": [
+    {
+      "name": "new boy",
+      "age": 4,
+      "gender": "male",
+      "disabled": false,
+      "study": true,
+      "description": "good boy",
+      "birthdate": "2023-01-11"
+    },
+    {
+      "name": "okkkkay",
+      "age": 4,
+      "gender": "male",
+      "disabled": false,
+      "study": true,
+      "description": "good boy",
+      "birthdate": "2023-01-11"
+    }
+  ],
+  "Researcher": "no one",
+  "ResearchOpinion": "no opinoinnnn"
+}

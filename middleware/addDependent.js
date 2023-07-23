@@ -1,20 +1,25 @@
 const Dependent = require("../model/Dependent.model");
 
 const addDependent = async (req, res, next) => {
-  if (!req.body.Dependent) next();
-  const dependentsToBeSaved = req.body.Dependent;
-  const savedDependentIDs = [];
-  try {
-    for (const dep of dependentsToBeSaved) {
-      const savedDep = await Dependent.create(dep);
-      savedDependentIDs.push(savedDep._id.toString());
-    }
-
-    console.log("Saved object IDs:", savedDependentIDs);
-    req.body.Dependent = savedDependentIDs;
+  if (!Array.isArray(req.body.Dependent)) {
     next();
-  } catch (error) {
-    next(error);
+  } else {
+    const dependentsToBeSaved = req.body.Dependent;
+
+    try {
+      const savedDependentIDs = await Promise.all(
+        dependentsToBeSaved.map(async (dep) => {
+          const deptobesave = new Dependent(dep);
+          await deptobesave.save({ session: req.session });
+          return deptobesave._id.toString();
+        })
+      );
+
+      req.body.Dependent = savedDependentIDs;
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
 };
 
