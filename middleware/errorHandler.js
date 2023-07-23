@@ -1,5 +1,7 @@
 const errorHandler = (err, req, res, next) => {
+  console.log(err);
   console.error(err.message);
+  console.log(err.stack);
 
   if (err instanceof NotFoundError) {
     res.status(404).json({ success: false, message: err.message });

@@ -1,5 +1,5 @@
-const { CustomError } = require("../middleware/errorHandler");
 const Case = require("../model/Case.model");
+const handleFileUpload = require("../utils/handleFileUpload");
 
 const getCases = async (req, res, next) => {
   try {
@@ -14,10 +14,17 @@ const getCases = async (req, res, next) => {
 };
 
 const addCase = async (req, res, next) => {
-  const newCase = new Case(req.body);
   try {
-    await newCase.save();
-    res.status(200).json(newCase);
+    if (req.files != undefined) {
+      const filePath = handleFileUpload(req.files.File);
+      const newCase = new Case({ ...req.body, filePath: filePath });
+      await newCase.save();
+      res.status(200).json(newCase);
+    } else {
+      const newCase = new Case(req.body);
+      await newCase.save();
+      res.status(200).json(newCase);
+    }
   } catch (error) {
     next(error);
   }
