@@ -1,12 +1,19 @@
 const router = require("express").Router();
-const { getCases } = require("../controller/case.controller");
+const {
+  getCases,
+  getCaseById,
+  updateOneCase,
+  deleteOneCase,
+} = require("../controller/case.controller");
 const saveCaseMDW = require("../middleware/addCase");
 const addDependent = require("../middleware/addDependent");
 const { validateCaseData } = require("../middleware/caseDataValidation");
 const commitSessionMiddleware = require("../middleware/commitSessionMDW");
 const startSessionMiddleware = require("../middleware/startSessionMDW");
+const validID = require("../middleware/validID");
 
 router.get("/", getCases);
+router.get("/:id", validID, getCaseById);
 router.post(
   "/",
   validateCaseData,
@@ -18,5 +25,7 @@ router.post(
     res.status(201).json(req.case);
   }
 );
+router.put("/:id", validID, updateOneCase);
+router.delete("/:id", validID, deleteOneCase);
 
 module.exports = router;

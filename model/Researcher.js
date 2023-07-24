@@ -5,14 +5,6 @@ const researcherSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: mongoose.Types.ObjectId,
   },
-  firstname: {
-    type: String,
-    required: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
-  },
   username: {
     type: String,
     required: true,
