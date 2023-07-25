@@ -22,6 +22,12 @@ function buildQuery(queryParameters) {
     MonthlyOutcome: "$eq",
     Researcher: "$eq",
     ResearchOpinion: "$eq",
+    name: "$eq",
+    gender: "$eq",
+    birthdate: "$eq",
+    description: "$eq",
+    study: "$eq",
+    disabled: "$eq",
   };
 
   for (const key in queryParameters) {

@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const cloudinary = require("../config/cloudinary");
 
-function removeFileInUploads(fileName) {
+function removeFileInUploadsLocal(fileName) {
   const uploadsFolderPath = path.join(__dirname, "../uploads");
 
   const filePath = path.join(uploadsFolderPath, fileName);
@@ -17,4 +18,18 @@ function removeFileInUploads(fileName) {
   }
 }
 
-module.exports = removeFileInUploads;
+async function removeFileFromCloudinary(public_id) {
+  try {
+    console.log("public_id", public_id);
+    const result = await cloudinary.uploader.destroy(`${public_id}`);
+
+    console.log("File deleted:", result);
+  } catch (err) {
+    console.error("Error deleting file:", err);
+  }
+}
+
+module.exports = {
+  removeFileInUploadsLocal,
+  removeFileFromCloudinary,
+};

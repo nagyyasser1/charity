@@ -1,8 +1,8 @@
 const { CustomError } = require("../middleware/errorHandler");
 const Case = require("../model/Case.model");
 const buildQuery = require("../utils/buildQuery");
-const removeFileInUploads = require("../utils/handleFileDelete");
-const handleFileUpload = require("../utils/handleFileUpload");
+const { removeFileInUploadsLocal } = require("../utils/handleFileDelete");
+const { handleFileUploadLocal } = require("../utils/handleFileUpload");
 const STATUS_CODES = require("../utils/statusCodes");
 
 const getCases = async (req, res, next) => {
@@ -38,7 +38,7 @@ const getCaseById = async (req, res, next) => {
 const addCase = async (req, res, next) => {
   try {
     if (req.files != undefined) {
-      const filePath = handleFileUpload(req.files.File);
+      const filePath = handleFileUploadLocal(req.files.File);
       const newCase = new Case({ ...req.body, filePath: filePath });
       await newCase.save();
       res.status(200).json(newCase);
@@ -62,8 +62,8 @@ const updateOneCase = async (req, res, next) => {
       throw new CustomError(STATUS_CODES.NOT_FOUND, `${caseId}:not Found!`);
 
     if (req?.files?.File != undefined) {
-      removeFileInUploads(prevCase.filePath);
-      const filePath = handleFileUpload(req.files.File);
+      removeFileInUploadsLocal(prevCase.filePath);
+      const filePath = handleFileUploadLocal(req.files.File);
       dataToBeUpdate = { ...req.body, filePath };
     }
 

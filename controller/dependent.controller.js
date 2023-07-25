@@ -1,5 +1,7 @@
 const { CustomError } = require("../middleware/errorHandler");
 const Dependent = require("../model/Dependent.model");
+const buildQuery = require("../utils/buildQuery");
+const STATUS_CODES = require("../utils/statusCodes");
 
 const getDependent = async (req, res, next) => {
   try {
@@ -13,11 +15,16 @@ const getDependent = async (req, res, next) => {
 };
 
 const getAllDeps = async (req, res, next) => {
+  const queryParameters = req.query;
+
   try {
-    const deps = await Dependent.find({});
-    res.status(200).json(deps);
-  } catch (error) {
-    next(error);
+    const query = buildQuery(queryParameters);
+
+    const result = await Dependent.find(query);
+
+    res.status(STATUS_CODES.SUCCESS).json(result);
+  } catch (err) {
+    next(err);
   }
 };
 
