@@ -14,7 +14,6 @@ const addDependent = async (req, res, next) => {
           return deptobesave._id.toString();
         })
       );
-
       req.body.Dependent = savedDependentIDs;
       next();
     } catch (error) {

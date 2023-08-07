@@ -1,24 +1,24 @@
-const {
-  handleFileUploadLocal,
-  handleFileUploadOnCloudinary,
-} = require("../utils/handleFileUpload");
+const { handleFileUploadOnCloudinary } = require("../utils/handleFileUpload");
 const Case = require("../model/Case.model");
 const { removeFileFromCloudinary } = require("../utils/handleFileDelete");
+const mongoose = require("mongoose");
 
 const saveCaseMDW = async (req, res, next) => {
   var result;
   try {
     if (req.files != undefined) {
       result = await handleFileUploadOnCloudinary(req.files.File);
-      console.log("result from 12", result);
-      // const filePath = handleFileUploadLocal(req.files.File);
       const newCase = new Case({ ...req.body, filePath: result.secure_url });
       await newCase.save({ session: req.session });
-      req.case = newCase;
+      req.session.caseId = newCase._id;
       next();
     } else {
+      const stringId = req.body.Box;
+      const objectId = new mongoose.Types.ObjectId(stringId);
+      req.body.Box = objectId;
       const newCase = new Case(req.body);
       await newCase.save({ session: req.session });
+      req.session.caseId = newCase._id;
       req.case = newCase;
       next();
     }

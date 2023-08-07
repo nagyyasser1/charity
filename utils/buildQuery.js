@@ -28,14 +28,17 @@ function buildQuery(queryParameters) {
     description: "$eq",
     study: "$eq",
     disabled: "$eq",
+    Dependent: "$elemMatch",
   };
-
   for (const key in queryParameters) {
     if (key in operatorsMap) {
       const operator = operatorsMap[key];
       const value = queryParameters[key];
 
-      if (operator === "$eq") {
+      if (Array.isArray(value)) {
+        // For 'Dependent' property, wrap each object in $elemMatch
+        query[key] = { $elemMatch: value };
+      } else if (operator === "$eq") {
         query[key] = value;
       } else {
         query[key] = { [operator]: parseInt(value) };

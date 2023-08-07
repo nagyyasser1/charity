@@ -7,7 +7,10 @@ const caseSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-
+    Box: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Box",
+    },
     Dependent: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +33,13 @@ const caseSchema = new mongoose.Schema(
 caseSchema.pre("save", function (next) {
   if (!this.Dependent || this.Dependent.length === 0) {
     delete this.Dependent;
+  }
+  next();
+});
+
+caseSchema.pre("save", function (next) {
+  if (!this.Box) {
+    delete this.Box;
   }
   next();
 });

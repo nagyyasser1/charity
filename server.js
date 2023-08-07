@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const caseRouter = require("./routes/case.router");
 const dependentRouter = require("./routes/dependent.router");
+const boxRouter = require("./routes/box.route");
 const { errorHandler } = require("./middleware/errorHandler");
 const notFound = require("./middleware/notFound");
 const rateLimiter = require("./middleware/rateLimit");
@@ -22,6 +23,10 @@ app.use(express.json());
 
 app.use("/api/v1/case", caseRouter);
 app.use("/api/v1/dependent", dependentRouter);
+app.use("/api/v1/box", boxRouter);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
 app.use(notFound);
 app.use(errorHandler);

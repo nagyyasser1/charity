@@ -7,13 +7,15 @@ const STATUS_CODES = require("../utils/statusCodes");
 
 const getCases = async (req, res, next) => {
   const queryParameters = req.query;
-
+  console.log(queryParameters);
   try {
     const query = buildQuery(queryParameters);
 
-    const result = await Case.find(query);
+    const result = await Case.find(query).populate("Dependent");
 
-    res.status(STATUS_CODES.SUCCESS).json(result);
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ count: result.length, cases: result });
   } catch (err) {
     next(err);
   }
