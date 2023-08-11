@@ -28,8 +28,8 @@ const addressSchema = Joi.object({
 });
 
 const boxSchema = Joi.object({
-  num: Joi.number().default(1),
-  id: Joi.string().trim(),
+  num: Joi.number().default(1).required(),
+  id: Joi.string().trim().required(),
 });
 
 const caseDataValidationSchema = Joi.object({

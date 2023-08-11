@@ -36,7 +36,6 @@ function buildQuery(queryParameters) {
       const value = queryParameters[key];
 
       if (Array.isArray(value)) {
-        // For 'Dependent' property, wrap each object in $elemMatch
         query[key] = { $elemMatch: value };
       } else if (operator === "$eq") {
         query[key] = value;

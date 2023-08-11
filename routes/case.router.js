@@ -24,7 +24,9 @@ router.post(
   LinkDependetWithItsCase,
   commitSessionMiddleware,
   (req, res) => {
-    res.status(201).json(req.case);
+    res
+      .status(201)
+      .json({ message: "case saved successfully.", case: req.case });
   }
 );
 router.put("/:id", validID, updateOneCase);
