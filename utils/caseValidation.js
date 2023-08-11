@@ -28,7 +28,7 @@ const addressSchema = Joi.object({
 });
 
 const boxSchema = Joi.object({
-  num: Joi.number().default(1).required(),
+  num: Joi.number().min(1).max(10).required(),
   id: Joi.string().trim().required(),
 });
 
@@ -49,7 +49,11 @@ const caseDataValidationSchema = Joi.object({
   MonthlyOutcome: Joi.string().required().trim(),
   Researcher: Joi.string().required().trim(),
   ResearchOpinion: Joi.string().required(),
-  Box: boxSchema.optional(),
+  Box: Joi.when("ApprovalStatus", {
+    is: "yes",
+    then: boxSchema.required(),
+    otherwise: boxSchema.optional(),
+  }),
   Address: addressSchema.required(),
   Dependent: Joi.array().items(dependentSchema),
   File: Joi.when("ApprovalStatus", {
