@@ -27,36 +27,36 @@ const addressSchema = Joi.object({
   street: Joi.string().trim(),
 });
 
-const boxSchema = Joi.object({
-  num: Joi.number().min(1).max(10).required(),
-  id: Joi.string().trim().required(),
-});
-
 const caseDataValidationSchema = Joi.object({
-  SSH: Joi.string().required().length(14).trim(),
-  Name: Joi.string().required(),
-  SocialStatus: Joi.string().valid("poor", "widows", "orphans").required(),
-  Sector: Joi.string().valid("foundation", "factory").required(),
-  ApprovalStatus: Joi.string().valid("yes", "no", "wating").required(),
-  Phone: Joi.string().length(11).required().trim(),
-  CashBenefits: Joi.string().required().trim(),
-  Bouns: Joi.number(),
-  Birthdate: Joi.date().required(),
-  StartDate: Joi.date().required(),
-  CheckDate: Joi.date().required(),
-  Description: Joi.string().required(),
-  MonthlyIncome: Joi.string().required().trim(),
-  MonthlyOutcome: Joi.string().required().trim(),
-  Researcher: Joi.string().required().trim(),
-  ResearchOpinion: Joi.string().required(),
-  Box: Joi.when("ApprovalStatus", {
+  ssh: Joi.number().required(),
+  name: Joi.string().required(),
+  socialStatus: Joi.string().valid("poor", "widows", "orphans").required(),
+  sector: Joi.string().valid("foundation", "factory").required(),
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
+  phone: Joi.number().required(),
+  cashBenefits: Joi.number().required(),
+  bouns: Joi.number(),
+  birthdate: Joi.date().required(),
+  startDate: Joi.date().required(),
+  checkDate: Joi.date().required(),
+  description: Joi.string().required(),
+  monthlyIncome: Joi.number().required(),
+  monthlyOutcome: Joi.number().required(),
+  researcher: Joi.string().required().trim(),
+  researchOpinion: Joi.string().required(),
+  box: Joi.when("ApprovalStatus", {
     is: "yes",
-    then: boxSchema.required(),
-    otherwise: boxSchema.optional(),
+    then: Joi.string().trim().required(),
+    otherwise: Joi.string().trim().optional(),
   }),
-  Address: addressSchema.required(),
-  Dependent: Joi.array().items(dependentSchema),
-  File: Joi.when("ApprovalStatus", {
+  boxCount: Joi.when("ApprovalStatus", {
+    is: "yes",
+    then: Joi.number().required(),
+    otherwise: Joi.number().optional(),
+  }),
+  address: addressSchema.required(),
+  dependent: Joi.array().items(dependentSchema),
+  file: Joi.when("ApprovalStatus", {
     is: "yes",
     then: fileSchema.required(),
     otherwise: fileSchema.optional(),

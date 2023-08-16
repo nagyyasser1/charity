@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 
 const caseSchema = new mongoose.Schema(
   {
-    SSH: {
+    ssh: {
       type: Number,
       unique: true,
       required: true,
     },
-    Box: {
+    box: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Box",
     },
-    Dependent: [
+    dependent: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Dependent",
@@ -31,14 +31,14 @@ const caseSchema = new mongoose.Schema(
 );
 
 caseSchema.pre("save", function (next) {
-  if (!this.Dependent || this.Dependent.length === 0) {
-    delete this.Dependent;
+  if (!this.dependent || this.dependent.length === 0) {
+    delete this.dependent;
   }
   next();
 });
 
 caseSchema.pre("save", function (next) {
-  if (!this.Box) {
+  if (!this.box) {
     delete this.Box;
   }
   next();

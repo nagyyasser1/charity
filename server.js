@@ -17,7 +17,7 @@ app.use(rateLimiter);
 app.use(morgan("dev"));
 app.use(cors());
 app.use(expressFileUpload());
-app.use(express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
 

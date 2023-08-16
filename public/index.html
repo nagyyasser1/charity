@@ -5,119 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSH Form</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>SSH Form</h1>
-    <form action="http://localhost:3000/api/v1/case" enctype="multipart/form-data" method="post">
-        <input type="file" name="File">
-        <label for="SSH">SSH:</label>
-        <input type="number" id="SSH" name="SSH" value="123456789" required><br>
-
-        <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" name="FirstName" value="John" required><br>
-
-        <label for="midname">Middle Name:</label>
-        <input type="text" id="midname" name="MidName" value="Doe" required><br>
-
-        <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" name="LastName" value="Smith" required><br>
-
-        <label for="status">Status:</label>
-        <select id="status" name="SocialStatus" required>
-            <option value="poor" selected>Poor</option>
-            <option value="widows">Widows</option>
-            <option value="orphans">Orphans</option>
-        </select><br>
-
-        <label for="Phone">Phone:</label>
-        <input type="text" id="phone" name="Phone" value="98765432109" required><br>
-
-        <label for="ApprovalStatus">Deserve:</label>
-        <select id="deserve" name="ApprovalStatus" required>
-            <option value="yes" selected>Yes</option>
-            <option value="no">no</option>
-            <option value="wating">wating</option>
-        </select><br>
-
-        <label for="CashBenefits">Salary:</label>
-        <input type="number" id="salary" name="CashBenefits" value="25000" required><br>
-
-        <label for="box">Box:</label>
-        <input type="number" id="box" name="Box" value="1"><br>
-
-        <label for="CheckDate">Check Date:</label>
-        <input type="date" id="checkDate" name="CheckDate" value="2023-07-20" required><br>
-
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="StartDate" value="2023-08-01" required><br>
-
-        <label for="birthdate">Birthdate:</label>
-        <input type="date" id="birthdate" name="Birthdate" value="1995-02-10" required><br>
-
-        <label for="description">Description:</label>
-        <textarea id="description" name="Description"
-            required>This person is in need of financial assistance.</textarea><br>
-
-        <label for="Town">Town:</label>
-        <input type="text" id="town" name="Town" value="Smallville" required><br>
-
-        <label for="Street">Street:</label>
-        <input type="text" id="street" name="Street" value="Main Street" required><br>
-
-        <label for="MonthlyIncome">Monthly Income:</label>
-        <input type="number" id="monthlyIncome" name="MonthlyIncome" value="2000" required><br>
-
-        <label for="MonthlyOutcome">Monthly Outcome:</label>
-        <input type="number" id="monthlyOutcome" name="MonthlyOutcome" value="1800" required><br>
-
-        <label for="sponsor">Sponsor:</label>
-        <select id="sponsor" name="Sector" required>
-            <option value="foundation" selected>Foundation</option>
-            <option value="special" selected>Special</option>
-            <option value="factory" selected>Factory</option>
-        </select><br>
-
-        <input type="text" name="Researcher">
-        <input type="text" name="ResearchOpinion">
-        <input type="submit" value="Submit">
-    </form>
+    <header>
+        <h1>Welcome To Charity.Org <span>API</span></h1>
+    </header>
+    <main>
+        <h2>Endpoints:</h2>
+        <ul>
+            <li>
+                <a href="#case">baseUrl/api/v1/case</a>
+            </li>
+            <li>
+                <a href="#dep">baseUrl/api/v1/dep</a>
+            </li>
+            <li>
+                <a href="#box">baseUrl/api/v1/box</a>
+            </li>
+        </ul>
+    </main>
+    <section id="case">
+        <div class="head">
+            <h4>Case</h4>
+            <p>Here you can add new cases to you api</p>
+        </div>
+        <div class="content">
+            <div class="method">
+                <h5>Method : Post</h5>
+            </div>
+            <div class="parameter">
+                <h5>Parameter : No Param</h5>
+            </div>
+            <div class="request">
+                <h5>Request body : <button id="btn">toggle</button></h5>
+                <div class="desc" id="desc">
+                    <ul>
+                        <li>ssh : number</li>
+                        <li>name : string</li>
+                        <li>socialStatus : string, valid("poor", "widows", "orphans")</li>
+                        <li>sector : string, valid("foundation", "factory")</li>
+                        <li>approvalStatus : string, valid("yes", "no", "wating")</li>
+                        <li>phone : number</li>
+                        <li>cashBenefits : number</li>
+                        <li>bouns : number *not required!</li>
+                        <li>checkDate : date</li>
+                        <li>startDate : date</li>
+                        <li>birthdate : date</li>
+                        <li>researcher : string</li>
+                        <li>researchOpinion : string</li>
+                        <li>monthlyOutcome : number</li>
+                        <li>monthlyIncome : number</li>
+                        <li>description : string</li>
+                        <li>box : string ,note=> an id of existing box"</li>
+                        <li>boxCount : number</li>
+                        <li>address : {town: string,street: string}</li>
+                        <li>dependent: [{
+                            name: string,<br>
+                            age: number,<br>
+                            gender: string, valid("male", "female"),<br>
+                            birthdate: date,<br>
+                            description: string,<br>
+                            study: bool,<br>
+                            studyLevel: string, valid("primary", "secondary", "high", "university"),<br>
+                            disabled: bool
+                            }]</li>
+                        <li>file : </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="response">
+                <h5>Response : ابقا اطبع متتعبناش معاك</h5>
+            </div>
+        </div>
+    </section>
     <script>
-        const apiUrl = 'http://localhost:3000/api/v1/case';
-        const form = document.getElementById('myForm');
+        const showHideBtn = document.getElementById("btn")
+        const descSection = document.getElementById("desc")
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Get the form data and file input element
-            const formData = new FormData(form);
-            const fileInput = form.querySelector('input[name="file"]');
-
-            // Ensure that a file has been selected before submitting
-            if (fileInput.files.length === 0) {
-                alert('Please select a file before submitting.');
-                return;
+        showHideBtn.addEventListener('click', (e) => {
+            if (descSection.offsetHeight > 0) {
+                descSection.style.height = 0
+            } else {
+                descSection.style.height = "auto"
             }
-
-            // Append the file to the FormData object
-            formData.append('file', fileInput.files[0]);
-
-            // Perform the form submission with both form data and file
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (response.ok) {
-                    alert('Form data and file submitted successfully!');
-                } else {
-                    alert('Error while submitting form data and file.');
-                }
-            } catch (error) {
-                console.error('Error while submitting form data and file:', error);
-            }
-        });
+        }
+        )
     </script>
 </body>
 

@@ -29,9 +29,11 @@ const queryCases = async (req, res, next) => {
 const getCaseById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const cas = await Case.findById(id);
+    const cas = await Case.findById(id)
+      .populate(["Box", "Dependent"])
+      .select("-__v");
     if (!cas) throw new CustomError(404, "id not Found!");
-    res.status(200).json({ status: true, case: cas });
+    res.status(200).json({ case: cas });
   } catch (error) {
     next(error);
   }
