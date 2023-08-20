@@ -1,0 +1,364 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>charity</title>
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+
+    select {
+        height: 32px;
+    }
+
+    button[type="button"],
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin: 10px 0 10px 0;
+    }
+
+    button[type="button"]:hover,
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .dependent {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+
+    .dependent h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .dependent label {
+        font-weight: bold;
+    }
+
+    /* Styling for file input */
+    #fileId {
+        display: block;
+        margin-top: 10px;
+    }
+
+    /* Styling for address section */
+    #town,
+    #street {
+        width: 49%;
+        margin-right: 2%;
+    }
+
+    /* Additional styling for responsiveness */
+    @media (max-width: 600px) {
+        form {
+            padding: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            padding: 6px;
+            margin-bottom: 8px;
+        }
+
+        #town,
+        #street {
+            width: 100%;
+            margin-right: 0;
+        }
+    }
+</style>
+
+
+<body>
+    <h1>Case Data Form</h1>
+    <form method="post" enctype="multipart/form-data">
+        <!-- SSH -->
+        <label for="ssh">SSH:</label>
+        <input type="number" id="ssh" name="ssh" required value="3"><br>
+
+        <!-- Name -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required value="nagy"><br>
+
+        <!-- Social Status -->
+        <label for="socialStatus">Social Status:</label>
+        <select id="socialStatus" name="socialStatus" required>
+            <option value="poor">Poor</option>
+            <option value="widows">Widows</option>
+            <option value="orphans">Orphans</option>
+        </select><br>
+
+        <!-- Sector -->
+        <label for="sector">Sector:</label>
+        <select id="sector" name="sector" required>
+            <option value="foundation">Foundation</option>
+            <option value="factory">Factory</option>
+        </select><br>
+
+        <!-- Approval Status -->
+        <label for="approvalStatus">Approval Status:</label>
+        <select id="approvalStatus" name="approvalStatus" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="waiting">Waiting</option>
+        </select><br>
+
+        <!-- Phone -->
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required value="01012121212"><br>
+
+        <!-- Cash Benefits -->
+        <label for="cashBenefits">Cash Benefits:</label>
+        <input type="number" id="cashBenefits" name="cashBenefits" required value="3"><br>
+
+        <!-- Bouns -->
+        <label for="bouns">Bouns:</label>
+        <input type="number" id="bouns" name="bouns" value="4"><br>
+
+        <!-- Birthdate -->
+        <label for="birthdate">Birthdate:</label>
+        <input type="date" id="birthdate" name="birthdate" required value="2000-01-01"><br>
+
+        <!-- Start Date -->
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required value="2000-01-01"><br>
+
+        <!-- Check Date -->
+        <label for="checkDate">Check Date:</label>
+        <input type="date" id="checkDate" name="checkDate" required value="2000-01-01"><br>
+
+        <!-- Description -->
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br>
+
+        <!-- Monthly Income -->
+        <label for="monthlyIncome">Monthly Income:</label>
+        <input type="number" id="monthlyIncome" name="monthlyIncome" required value="9"><br>
+
+        <!-- Monthly Outcome -->
+        <label for="monthlyOutcome">Monthly Outcome:</label>
+        <input type="number" id="monthlyOutcome" name="monthlyOutcome" required value="88"><br>
+
+        <!-- Researcher -->
+        <label for="researcher">Researcher:</label>
+        <input type="text" id="researcher" name="researcher" required value="nagy"><br>
+
+        <!-- Research Opinion -->
+        <label for="researchOpinion">Research Opinion:</label>
+        <textarea id="researchOpinion" name="researchOpinion" required value="lsdflk"></textarea><br>
+
+        <!-- Box -->
+        <label for="box">Box:</label>
+        <input type="text" id="box" name="box" value="64dcb6b54236f45f2f8ecd90"><br>
+
+        <!-- Box Count -->
+        <label for="boxCount">Box Count:</label>
+        <input type="number" id="boxCount" name="boxCount" value="9"><br>
+
+        <!-- File -->
+        <label for="fileId">File:</label>
+        <input type="file" name="file" id="fileId">
+
+
+        <!-- Address -->
+        <h2>Address</h2>
+        <label for="town">Town:</label>
+        <input type="text" id="town" name="address[town]"><br>
+        <label for="street">Street:</label>
+        <input type="text" id="street" name="address[street]"><br>
+
+
+        <!-- Dependents -->
+        <h2>Dependents</h2>
+        <div id="dependentsContainer">
+            <div class="dependent">
+                <h3>Dependent 1</h3>
+                <label for="dependent1Name">Name:</label>
+                <input type="text" id="dependent1Name" name="dependents[0][name]" value="ll"><br>
+
+                <label for="dependent1Age">Age:</label>
+                <input type="number" id="dependent1Age" name="dependents[0][age]" value="44"><br>
+
+                <label for="dependent1Gender">Gender:</label>
+                <select id="dependent1Gender" name="dependents[0][gender]">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select><br>
+
+                <label for="dependent1Birthdate">Birthdate:</label>
+                <input type="date" id="dependent1Birthdate" name="dependents[0][birthdate]" value="2000-01-01"><br>
+
+                <label for="dependent1Description">Description:</label>
+                <textarea id="dependent1Description" name="dependents[0][description]" value="kdflsdf"></textarea><br>
+
+                <label for="dependent1Study">Study:</label>
+                <input type="checkbox" id="dependent1Study" name="dependents[0][study]"><br>
+
+                <label for="dependent1StudyLevel">Study Level:</label>
+                <select id="dependent1StudyLevel" name="dependents[0][studyLevel]">
+                    <option value="primary">Primary</option>
+                    <option value="secondary">Secondary</option>
+                    <option value="high">High</option>
+                    <option value="university">University</option>
+                </select><br>
+
+                <label for="dependent1Disabled">Disabled:</label>
+                <input type="checkbox" id="dependent1Disabled" name="dependents[0][disabled]"><br>
+            </div>
+            <!-- You can add more dependent blocks by copying the above code and incrementing the index -->
+        </div>
+        <button type="button" id="addDependent">Add Dependent</button><br>
+
+
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        const addDependentButton = document.getElementById("addDependent");
+        const dependentsContainer = document.getElementById("dependentsContainer");
+        let dependentIndex = 1;
+
+        addDependentButton.addEventListener("click", () => {
+            const newDependent = document.createElement("div");
+            newDependent.className = "dependent";
+            newDependent.innerHTML = `
+          <h3>Dependent ${dependentIndex + 1}</h3>
+          <!-- Copy the dependent fields from the above code and update the index -->
+    `;
+            dependentsContainer.appendChild(newDependent);
+            dependentIndex++;
+        });
+
+
+        function getFormData() {
+            const formData = new FormData(document.querySelector('form'));
+            const formDataObject = {};
+
+            for (const [key, value] of formData.entries()) {
+                if (key.includes('.')) {
+                    const [parentKey, childKey] = key.split('.');
+
+                    if (!formDataObject[parentKey]) {
+                        formDataObject[parentKey] = {};
+                    }
+                    formDataObject[parentKey][childKey] = value;
+                }
+
+                else {
+                    formDataObject[key] = value;
+                }
+            }
+
+            // Convert dependents to an array of objects
+            formDataObject.dependents = Object.values(formDataObject.dependents);
+
+
+            return formDataObject;
+        }
+
+        function submitFormData(formData) {
+            const url = 'http://localhost:3000/api/v1/case';
+            const options = {
+                method: 'POST',
+                body: formData,
+            };
+
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response from server:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+
+            const formData = new FormData(document.querySelector("form"))
+
+
+            // Add the key-value pairs from the object
+            // const dataObject = getFormData()
+
+            // for (var key in dataObject) {
+            //     if (dataObject.hasOwnProperty(key)) {
+            //         formData.append(key, dataObject[key]);
+            //     }
+            // }
+
+            formData.append("address", JSON.stringify({ town: "moderntown", street: "modernstreet" }))
+
+            formData.append("dependents", JSON.stringify([{ name: "testName", age: 3, gender: "male", birthdate: '11-02-2023', description: "test", study: true, studyLevel: "primary", disabled: false }]))
+
+            submitFormData(formData);
+        }
+
+
+        // Attach the handleSubmit function to the form's submit event
+        const form = document.querySelector('form');
+        form.addEventListener('submit', handleSubmit);
+
+    </script>
+
+</body>
+
+</html>

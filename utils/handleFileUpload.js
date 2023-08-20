@@ -15,30 +15,24 @@ function handleFileUploadLocal(file) {
 
 // Assuming cloudinary is properly imported or required
 
-async function handleFileUploadOnCloudinary(file) {
-  try {
-    return new Promise((resolve, reject) => {
-      const fileStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "charityOrganization",
-        },
-        (error, result) => {
-          if (error) {
-            console.error(error);
-            reject(error);
-          } else {
-            resolve(result);
-          }
+function handleFileUploadOnCloudinary(file) {
+  return new Promise((resolve, reject) => {
+    const fileStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "charityOrganization",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
         }
-      );
+      }
+    );
 
-      fileStream.write(file.data);
-      fileStream.end();
-    });
-  } catch (error) {
-    console.log(error);
-    throw error; // Rethrow the error to the caller if something goes wrong in the try block
-  }
+    fileStream.write(file.data);
+    fileStream.end();
+  });
 }
 
 module.exports = {

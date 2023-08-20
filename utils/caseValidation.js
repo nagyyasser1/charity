@@ -44,23 +44,23 @@ const caseDataValidationSchema = Joi.object({
   monthlyOutcome: Joi.number().required(),
   researcher: Joi.string().required().trim(),
   researchOpinion: Joi.string().required(),
-  box: Joi.when("ApprovalStatus", {
+  box: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.string().trim().required(),
     otherwise: Joi.string().trim().optional(),
   }),
-  boxCount: Joi.when("ApprovalStatus", {
+  boxCount: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.number().required(),
     otherwise: Joi.number().optional(),
   }),
   address: addressSchema.required(),
-  dependent: Joi.array().items(dependentSchema),
-  file: Joi.when("ApprovalStatus", {
-    is: "yes",
-    then: fileSchema.required(),
-    otherwise: fileSchema.optional(),
-  }),
+  dependents: Joi.array().items(dependentSchema),
+  // file: Joi.when("approvalStatus", {
+  //   is: "yes",
+  //   then: fileSchema.required(),
+  //   otherwise: fileSchema.optional(),
+  // }),
 });
 
 module.exports = {

@@ -11,19 +11,13 @@ const caseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Box",
     },
-    dependent: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Dependent",
-      },
-    ],
   },
   {
     strict: false,
     toJSON: {
       transform: function (doc, ret) {
-        if (ret.Dependent && ret.Dependent.length === 0) {
-          delete ret.Dependent;
+        if (ret.dependent && ret.dependent.length === 0) {
+          delete ret.dependent;
         }
       },
     },
@@ -31,8 +25,8 @@ const caseSchema = new mongoose.Schema(
 );
 
 caseSchema.pre("save", function (next) {
-  if (!this.dependent || this.dependent.length === 0) {
-    delete this.dependent;
+  if (!this.dependents || this.dependents.length === 0) {
+    delete this.dependents;
   }
   next();
 });
