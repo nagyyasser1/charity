@@ -7,36 +7,37 @@ const caseSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    box: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Box",
+    caseType: [String],
+    info: {
+      type: Object,
+      required: true,
+    },
+    monthlyInfo: {
+      type: Object,
+    },
+    roofInfo: {
+      type: Object,
+    },
+    loanInfo: {
+      type: Object,
+    },
+    debtInfo: {
+      type: Object,
+    },
+    treatmentInfo: {
+      type: Object,
+    },
+    furnitureInfo: {
+      type: Object,
+    },
+    operationInfo: {
+      type: Object,
     },
   },
   {
     strict: false,
-    toJSON: {
-      transform: function (doc, ret) {
-        if (ret.dependent && ret.dependent.length === 0) {
-          delete ret.dependent;
-        }
-      },
-    },
   }
 );
-
-caseSchema.pre("save", function (next) {
-  if (!this.dependents || this.dependents.length === 0) {
-    delete this.dependents;
-  }
-  next();
-});
-
-caseSchema.pre("save", function (next) {
-  if (!this.box) {
-    delete this.Box;
-  }
-  next();
-});
 
 const Case = mongoose.model("Case", caseSchema);
 

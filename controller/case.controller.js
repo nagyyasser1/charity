@@ -1,7 +1,7 @@
-const { mongoose } = require("mongoose");
-const { CustomError } = require("../middleware/errorHandler");
+const { CustomError } = require("../middleware/system/errorHandler");
 const Case = require("../model/Case.model");
 const buildQuery = require("../utils/buildQuery");
+
 const {
   removeFileInUploadsLocal,
   removeFileFromCloudinary,
@@ -12,7 +12,29 @@ const {
 } = require("../utils/handleFileUpload");
 const STATUS_CODES = require("../utils/statusCodes");
 
-const getCases = async (req, res, next) => {
+// @desc Create Mew Basic Case
+// @route POST /case
+// @access Private
+const handleAddBasicCase = async (req, res, next) => {
+  try {
+    const { ssh, info } = req.body;
+    const caseObj = { ssh, info, caseType: [] };
+
+    // Create and store new case
+    const new_case = await Case.create(caseObj);
+
+    res
+      .status(STATUS_CODES.CREATED)
+      .json({ message: "saved.", caseData: new_case });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc Get all cases
+// @route Get /case
+// @access Privite
+const handleGetAllCases = async (req, res, next) => {
   const queryParameters = req.query;
   try {
     const query = buildQuery(queryParameters);
@@ -27,51 +49,17 @@ const getCases = async (req, res, next) => {
   }
 };
 
-const queryCases = async (req, res, next) => {
-  try {
-  } catch (error) {}
-};
-
-const getCaseById = async (req, res, next) => {
+// @desc Get  case
+// @route Get /case/:id
+// @access Private
+const handleGetCaseById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const cas = await Case.findById(id).populate("box");
-    if (!cas) throw new CustomError(404, "id not Found!");
-    res.status(200).json({ case: cas });
+    const caseData = await Case.findById(id).select("-__v").lean();
+    if (!caseData)
+      throw new CustomError(STATUS_CODES.NOT_FOUND, "id not Found!");
+    res.status(200).json({ case: caseData });
   } catch (error) {
-    next(error);
-  }
-};
-
-const addCase = async (req, res, next) => {
-  let result;
-  try {
-    if (req.files != undefined) {
-      result = await handleFileUploadOnCloudinary(req.files.file);
-      if (!result)
-        throw new CustomError(
-          STATUS_CODES.SERVER_ERROR,
-          "can not upload the file on cluodinary"
-        );
-
-      const newCase = await Case.create({
-        ...req.body,
-        filePath: result.secure_url,
-      });
-
-      res.status(200).json({
-        message: "saved.",
-        case: newCase,
-      });
-    } else {
-      const newCase = await Case.create({ ...req.body });
-      res.status(200).json({
-        message: "saved.",
-        case: newCase,
-      });
-    }
-  } catch (error) {
-    if (result) removeFileFromCloudinary(result?.public_id);
     next(error);
   }
 };
@@ -119,10 +107,9 @@ const deleteOneCase = async (req, res, next) => {
 };
 
 module.exports = {
-  getCases,
-  addCase,
-  getCaseById,
+  handleAddBasicCase,
+  handleGetAllCases,
+  handleGetCaseById,
   updateOneCase,
   deleteOneCase,
-  queryCases,
 };

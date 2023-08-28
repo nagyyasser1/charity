@@ -1,6 +1,6 @@
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
-const { CustomError } = require("../middleware/errorHandler");
+const { CustomError } = require("../middleware/system/errorHandler");
 const cloudinary = require("../config/cloudinary");
 
 function handleFileUploadLocal(file) {

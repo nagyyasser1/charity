@@ -1,41 +1,17 @@
-const router = require("express").Router();
-const fileUpload = require("express-fileupload");
 const {
-  getCases,
-  getCaseById,
-  updateOneCase,
-  deleteOneCase,
-  addCase,
+  handleGetCaseById,
+  handleGetAllCases,
+  handleAddBasicCase,
 } = require("../controller/case.controller");
-const { validateData } = require("../middleware/case/caseValidate");
-const validBoxID = require("../middleware/validBoxID");
-const validID = require("../middleware/validID");
 
-router.get("/", getCases);
-router.get("/:id", validID, getCaseById);
-router.post(
-  "/",
-  fileUpload({ createParentPath: true }),
-  (req, res, next) => {
-    const address = req.body.address;
-    const dependents = req.body.dependents;
+const { validate_case_data } = require("../middleware/case/data-validation");
+const CASE_TYPES = require("../utils/caseTypes");
 
-    if (typeof address === "string") {
-      const parsedAddress = JSON.parse(address);
-      req.body.address = parsedAddress;
-    }
+const router = require("express").Router();
 
-    if (typeof dependents === "string") {
-      req.body.dependents = JSON.parse(req.body.dependents);
-    }
-
-    next();
-  },
-  validateData,
-  validBoxID,
-  addCase
-);
-router.put("/:id", validID, updateOneCase);
-router.delete("/:id", validID, deleteOneCase);
+// @route /case
+router.post("/", validate_case_data(CASE_TYPES.BASIC), handleAddBasicCase); // Create new case in the system with basic info
+router.get("/", handleGetAllCases); // Get all cases
+router.get("/:id", handleGetCaseById); // get case by id
 
 module.exports = router;

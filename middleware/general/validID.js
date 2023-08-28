@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { CustomError } = require("./errorHandler");
-const STATUS_CODES = require("../utils/statusCodes");
+const { CustomError } = require("../system/errorHandler");
+const STATUS_CODES = require("../../utils/statusCodes");
 
 const validID = (req, res, next) => {
   const id = req.params.id;

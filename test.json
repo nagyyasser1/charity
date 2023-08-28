@@ -1,43 +1,156 @@
 {
-  "SSH": 90010000,
-  "FirstName": "new case",
-  "MidName": "saber",
-  "LastName": "Mahmoud",
-  "SocialStatus": "orphans",
-  "Sector": "foundation",
-  "ApprovalStatus": "yes",
-  "Phone": "77777777777",
-  "CashBenefits": 11,
-  "Box": 3,
-  "CheckDate": "2023-07-23",
-  "StartDate": "2023-07-23",
-  "Birthdate": "2023-07-23",
-  "Description": "mamama",
-  "Town": "gaga",
-  "Street": "lsdkfj",
-  "MonthlyIncome": 111,
-  "MonthlyOutcome": 1112,
-  "Dependent": [
-    {
-      "name": "new boy",
-      "age": 4,
-      "gender": "male",
-      "disabled": false,
-      "study": true,
-      "description": "good boy",
-      "birthdate": "2023-01-11"
-    },
-    {
-      "name": "okkkkay",
-      "age": 4,
-      "gender": "male",
-      "disabled": false,
-      "study": true,
-      "description": "good boy",
-      "birthdate": "2023-01-11"
+  "ssh": 90010000,
+  "isUrgent": "true",
+  "info": {
+    "name": "fatma noor ali hamed",
+    "phone": "0111224399",
+    "address": {
+      "town": "heros",
+      "street": "super man"
     }
+  },
+  "caseType": [
+    "monthly",
+    "roofRepair",
+    "debt",
+    "loan",
+    "furniture",
+    "treatment"
   ],
-  "Researcher": "no one",
-  "ResearchOpinion": "no opinoinnnn"
+  "monthlyInfo": {
+    "sector": "foundation",
+    "socialStatus": "orphans",
+    "approvalStatus": "yes",
+    "cashBenefits": 11,
+    "boxCount": 3,
+    "monthlyIncome": 111,
+    "monthlyOutcome": 1112,
+    "checkDate": "2023-07-23",
+    "startDate": "2023-07-23",
+    "birthdate": "2023-07-23",
+    "description": "mamama",
+    "researcher": "ali mansour",
+    "researchOpinion": "it deserve",
+    "dependents": [
+      {
+        "name": "mahmoud",
+        "age": 5,
+        "gender": "male",
+        "disabled": false,
+        "study": true,
+        "description": "good boy",
+        "birthdate": "2023-01-11"
+      }
+    ]
+  },
+  "roofRepairInfo": {
+    "cost": "10000",
+    "date": "07-08-2023",
+    "description": "some random text",
+    "done": "true"
+  },
+  "loanInfo": {
+    "items": [
+      {
+        "cost": "5000",
+        "description": "to get married",
+        "researcher": "ali goma",
+        "startDate": "07-08-2023",
+        "endDate": "07-08-2024",
+        "slideCount": "500",
+        "paid": "1500"
+      },
+      {
+        "cost": "5000",
+        "description": "to get married",
+        "researcher": "ali goma",
+        "startDate": "07-08-2023",
+        "endDate": "07-08-2024",
+        "slideCount": "500",
+        "paid": "1500"
+      }
+    ],
+    "totalPrice": "10000"
+  },
+  "debtInfo": {
+    "items": [
+      {
+        "const": "6000",
+        "description": "to get food",
+        "date": "11-01-2021"
+      },
+      {
+        "const": "1000",
+        "description": "to start project",
+        "date": "07-08-2023"
+      }
+    ],
+    "totalPrice": "7000"
+  },
+  "furniture": {
+    "items": [
+      {
+        "devices": [
+          {
+            "category": "cooker",
+            "price": "2000"
+          },
+          {
+            "category": "blender",
+            "price": "1100"
+          }
+        ],
+        "totalPrice": "3100"
+      }
+    ],
+    "totalPrice": "8100"
+  },
+  "treatment": {
+    "items": [
+      {
+        "name": "morfin",
+        "price": "311"
+      },
+      {
+        "name": "refo",
+        "price": "400"
+      }
+    ],
+    "totalPrice": "711"
+  },
+  "operation": {
+    "items": [
+      {
+        "doctorName": "sss",
+        "doctorPhone": "99999",
+        "doctorAddress": "iiiii",
+        "operationName": "kdlksdf",
+        "date": "99-999-999",
+        "operationSuccess": "true",
+        "description": "kdfksdf",
+        "const": "9999",
+        "costFromFoundation": "999",
+        "totalCost": "4444",
+        "researcher": "said",
+        "isUrgent": "false"
+      }
+    ],
+    "totalPrice": "10000"
+  }
 }
 
+{
+  "socialStatus": "poor",
+  "sector": "foundation",
+  "approvalStatus": "yes",
+  "cashBenefits": "222",
+  "birthdate": "11-01-2000",
+  "startDate": "12-22-2023",
+  "checkDate": "03-1-2024",
+  "description": "hello world",
+  "monthlyIncome": "3000",
+  "monthlyOutcome": "3200",
+  "researcher": "ali mahmoud",
+  "researchOpinion": "it deserve",
+  "boxCount": "1"
+}
