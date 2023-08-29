@@ -21,17 +21,21 @@ const handleAddLoanToCase = async (req, res, next) => {
     let { items } = case_data.loanInfo;
 
     const {
+      isUrgent,
       cost,
       description,
       researcher,
       startDate,
       endDate,
+      numOfPaidMonths,
       slideCount,
       paid,
       finished,
     } = req.body;
 
     const newLoanItem = {
+      isUrgent,
+      numOfPaidMonths,
       cost,
       description,
       researcher,

@@ -1,5 +1,6 @@
 const Case = require("../model/Case.model");
 const STATUS_CODES = require("../utils/statusCodes");
+const { CustomError } = require("../middleware/system/errorHandler");
 
 const handleAddRoofDataToCase = async (req, res, next) => {
   try {

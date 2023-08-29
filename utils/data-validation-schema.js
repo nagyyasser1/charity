@@ -18,16 +18,12 @@ const basicCaseDataSchema = Joi.object({
 });
 
 const dependentSchema = Joi.object({
-  name: Joi.string(),
-  age: Joi.number().integer().min(0),
+  name: Joi.string().required(),
+  age: Joi.number().required(),
   gender: Joi.string().valid("male", "female").required(),
   birthdate: Joi.date().required(),
   description: Joi.string(),
   study: Joi.bool().required(),
-  studyLevel: Joi.string()
-    .trim()
-    .valid("primary", "secondary", "high", "university")
-    .required(),
   disabled: Joi.bool().required(),
 });
 
@@ -40,12 +36,32 @@ const monthlyCaseSchema = Joi.object({
   bouns: Joi.number(),
   birthdate: Joi.date().required(),
   startDate: Joi.date().required(),
-  checkDate: Joi.date().required(),
+  checkResearchDate: Joi.when("approvalStatus", {
+    is: "yes",
+    then: Joi.date().required(),
+    otherwise: Joi.number().optional(),
+  }),
   description: Joi.string().required(),
-  monthlyIncome: Joi.number().required(),
-  monthlyOutcome: Joi.number().required(),
-  researcher: Joi.string().required().trim(),
-  researchOpinion: Joi.string().required(),
+  monthlyIncome: Joi.when("approvalStatus", {
+    is: "yes",
+    then: Joi.number().required(),
+    otherwise: Joi.number().optional(),
+  }),
+  monthlyOutcome: Joi.when("approvalStatus", {
+    is: "yes",
+    then: Joi.number().required(),
+    otherwise: Joi.number().optional(),
+  }),
+  researcher: Joi.when("approvalStatus", {
+    is: "yes",
+    then: Joi.string().required().trim(),
+    otherwise: Joi.number().optional(),
+  }),
+  researchOpinion: Joi.when("approvalStatus", {
+    is: "yes",
+    then: Joi.string().required(),
+    otherwise: Joi.number().optional(),
+  }),
   boxCount: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.number().required(),
@@ -55,20 +71,53 @@ const monthlyCaseSchema = Joi.object({
 });
 
 const roofCaseSchema = Joi.object({
+  status: Joi.string().valid("wating", "yes", "no"), // update
   cost: Joi.number().required(),
   date: Joi.date().required(),
+  startDate: Joi.when("status", {
+    //update
+    is: "yes",
+    then: Joi.date().required(),
+    otherwise: Joi.date().optional(),
+  }),
+  endDate: Joi.when("status", {
+    //update
+    is: "yes",
+    then: Joi.date().required(),
+    otherwise: Joi.date().optional(),
+  }),
   description: Joi.string().required(),
-  img1: Joi.string().required(),
-  img2: Joi.string().required(),
+  researcher: Joi.when("status", {
+    is: "yes",
+    then: Joi.string().trim().required(),
+    otherwise: Joi.string().optional(),
+  }),
+  img1: Joi.when("status", {
+    is: "yes",
+    then: Joi.string().required(),
+    otherwise: Joi.string().optional(),
+  }),
+  img2: Joi.when("status", {
+    is: "yes",
+    then: Joi.string().required(),
+    otherwise: Joi.string().optional(),
+  }),
+  file: Joi.when("status", {
+    is: "yes",
+    then: Joi.string().required(),
+    otherwise: Joi.string().optional(),
+  }),
 });
 
-// قرض
+// قرض updated
 const loanCaseSchema = Joi.object({
+  isUrgent: Joi.bool().required(),
   cost: Joi.number().required(),
   description: Joi.string().required(),
   researcher: Joi.string().required(),
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
+  numOfPaidMonths: Joi.number().required(),
   slideCount: Joi.number().required(),
   paid: Joi.number().required(),
   finished: Joi.bool().required(),
@@ -84,6 +133,11 @@ const debtCaseSchema = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().required(),
   finished: Joi.bool().required(),
+  researcher: Joi.string().required(),
+  debtMan: Joi.string().required(),
+  debtManPhone: Joi.number().required(),
+  address: Joi.string().required(),
+  file: Joi.string().required(),
 });
 
 const treatmentCaseShema = Joi.object({
@@ -91,9 +145,9 @@ const treatmentCaseShema = Joi.object({
   price: Joi.number().required(),
   researcher: Joi.string().required(),
   startDate: Joi.date().required(),
+  monthly: Joi.bool().required(),
   description: Joi.string().required(),
   finished: Joi.bool().required(),
-  monthly: Joi.bool().required(),
 });
 
 const deviceSchema = Joi.object({
@@ -115,9 +169,10 @@ const operationCaseShema = Joi.object({
   date: Joi.date().required(),
   operationSuccess: Joi.bool().required(),
   description: Joi.string().required(),
-  operationConst: Joi.number().required(),
+  operationCost: Joi.number().required(),
   costFromFoundation: Joi.number().required(),
   researcher: Joi.string().required(),
+  file: Joi.string().required(),
 });
 
 module.exports = {

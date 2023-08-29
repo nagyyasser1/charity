@@ -29,6 +29,11 @@ const handleAddDebt = async (req, res, next) => {
       startDate,
       endDate,
       finished,
+      researcher,
+      debtMan,
+      debtManPhone,
+      address,
+      file,
     } = req.body;
 
     const newDebtItem = {
@@ -40,6 +45,11 @@ const handleAddDebt = async (req, res, next) => {
       startDate,
       endDate,
       finished,
+      researcher,
+      debtMan,
+      debtManPhone,
+      address,
+      file,
     };
 
     items.push(newDebtItem);

@@ -29,9 +29,10 @@ const handleAddOperation = async (req, res, next) => {
       date,
       operationSuccess,
       description,
-      operationConst,
+      operationCost,
       costFromFoundation,
       researcher,
+      file,
     } = req.body;
 
     const newOperationItem = {
@@ -43,9 +44,10 @@ const handleAddOperation = async (req, res, next) => {
       date,
       operationSuccess,
       description,
-      operationConst,
+      operationCost,
       costFromFoundation,
       researcher,
+      file,
     };
 
     items.push(newOperationItem);
