@@ -20,11 +20,12 @@ const handleAddFurniture = async (req, res, next) => {
 
     let { items } = case_data.furnitureInfo;
 
-    const { devices, totalPrice } = req.body;
+    const { devices, totalPrice, approvalStatus } = req.body;
 
     const newFurnitureItem = {
       devices,
       totalPrice,
+      approvalStatus,
     };
 
     items.push(newFurnitureItem);

@@ -11,7 +11,6 @@ const info = Joi.object({
   address: addressSchema.required(),
 });
 
-// validate basic info should be in any case in the system
 const basicCaseDataSchema = Joi.object({
   ssh: Joi.number().required(),
   info: info.required(),
@@ -27,7 +26,6 @@ const dependentSchema = Joi.object({
   disabled: Joi.bool().required(),
 });
 
-// Validate Monthy Case Data
 const monthlyCaseSchema = Joi.object({
   socialStatus: Joi.string().valid("poor", "widows", "orphans").required(),
   sector: Joi.string().valid("foundation", "factory").required(),
@@ -71,11 +69,10 @@ const monthlyCaseSchema = Joi.object({
 });
 
 const roofCaseSchema = Joi.object({
-  status: Joi.string().valid("wating", "yes", "no"), // update
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
   cost: Joi.number().required(),
   date: Joi.date().required(),
   startDate: Joi.when("status", {
-    //update
     is: "yes",
     then: Joi.date().required(),
     otherwise: Joi.date().optional(),
@@ -109,8 +106,8 @@ const roofCaseSchema = Joi.object({
   }),
 });
 
-// قرض updated
 const loanCaseSchema = Joi.object({
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
   isUrgent: Joi.bool().required(),
   cost: Joi.number().required(),
   description: Joi.string().required(),
@@ -121,10 +118,12 @@ const loanCaseSchema = Joi.object({
   slideCount: Joi.number().required(),
   paid: Joi.number().required(),
   finished: Joi.bool().required(),
+  file: Joi.string().required(),
 });
 
-// دين
 const debtCaseSchema = Joi.object({
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
+  isUrgent: Joi.bool().required(),
   debtAmount: Joi.number().required(),
   paidAmount: Joi.number().required(),
   restAmount: Joi.number().required(),
@@ -141,6 +140,8 @@ const debtCaseSchema = Joi.object({
 });
 
 const treatmentCaseShema = Joi.object({
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
+  isUrgent: Joi.bool().required(),
   name: Joi.string().required(),
   price: Joi.number().required(),
   researcher: Joi.string().required(),
@@ -156,11 +157,13 @@ const deviceSchema = Joi.object({
 });
 
 const furnitureCaseShema = Joi.object({
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
   devices: Joi.array().items(deviceSchema).required(),
   totalPrice: Joi.number().required(),
 });
 
 const operationCaseShema = Joi.object({
+  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
   isUrgent: Joi.bool().required(),
   doctorName: Joi.string().required(),
   doctorPhone: Joi.number().required(),

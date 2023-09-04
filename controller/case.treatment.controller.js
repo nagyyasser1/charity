@@ -21,6 +21,8 @@ const handleAddTreatment = async (req, res, next) => {
     let { items } = case_data.treatmentInfo;
 
     const {
+      approvalStatus,
+      isUrgent,
       name,
       price,
       researcher,
@@ -31,6 +33,8 @@ const handleAddTreatment = async (req, res, next) => {
     } = req.body;
 
     const newLoanItem = {
+      approvalStatus,
+      isUrgent,
       name,
       price,
       researcher,

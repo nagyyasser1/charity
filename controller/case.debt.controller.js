@@ -21,6 +21,8 @@ const handleAddDebt = async (req, res, next) => {
     let { items } = case_data.debtInfo;
 
     const {
+      approvalStatus,
+      isUrgent,
       debtAmount,
       paidAmount,
       restAmount,
@@ -37,6 +39,8 @@ const handleAddDebt = async (req, res, next) => {
     } = req.body;
 
     const newDebtItem = {
+      approvalStatus,
+      isUrgent,
       debtAmount,
       paidAmount,
       restAmount,

@@ -21,6 +21,7 @@ const handleAddLoanToCase = async (req, res, next) => {
     let { items } = case_data.loanInfo;
 
     const {
+      approvalStatus,
       isUrgent,
       cost,
       description,
@@ -31,9 +32,11 @@ const handleAddLoanToCase = async (req, res, next) => {
       slideCount,
       paid,
       finished,
+      file,
     } = req.body;
 
     const newLoanItem = {
+      approvalStatus,
       isUrgent,
       numOfPaidMonths,
       cost,
@@ -44,6 +47,7 @@ const handleAddLoanToCase = async (req, res, next) => {
       slideCount,
       paid,
       finished,
+      file,
     };
 
     items.push(newLoanItem);

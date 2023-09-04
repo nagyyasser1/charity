@@ -21,6 +21,7 @@ const handleAddOperation = async (req, res, next) => {
     let { items } = case_data.operationInfo;
 
     const {
+      approvalStatus,
       isUrgent,
       doctorName,
       doctorPhone,
@@ -36,6 +37,7 @@ const handleAddOperation = async (req, res, next) => {
     } = req.body;
 
     const newOperationItem = {
+      approvalStatus,
       isUrgent,
       doctorName,
       doctorPhone,
