@@ -1,9 +1,9 @@
 {
   "ssh": 90010000,
-  "isUrgent": "true",
   "info": {
     "name": "fatma noor ali hamed",
     "phone": "0111224399",
+    "desc": "",
     "address": {
       "town": "heros",
       "street": "super man"
@@ -90,20 +90,40 @@
   "furniture": {
     "items": [
       {
+        "name": "fatma noor ali hamed",
+        "date": "07-08-2023",
+        "researcher": "ali mansour",
         "devices": [
           {
-            "category": "cooker",
-            "price": "2000"
+            "type": "cooker",
+            "count": "1",
+            "stauts": "new"
           },
           {
-            "category": "blender",
-            "price": "1100"
+            "type": "blender",
+            "count": "1",
+            "stauts": "new"
           }
         ],
         "totalPrice": "3100"
+      },
+      {
+        "devices": [
+          {
+            "type": "cooker",
+            "count": "1",
+            "stauts": "new"
+          },
+          {
+            "type": "blender",
+            "count": "1",
+            "stauts": "new"
+          }
+        ],
+        "totalPrice": "3200"
       }
     ],
-    "totalPrice": "8100"
+    "totalPrice": "6200"
   },
   "treatment": {
     "items": [
@@ -137,20 +157,94 @@
     ],
     "totalPrice": "10000"
   }
-}
-
-{
-  "socialStatus": "poor",
-  "sector": "foundation",
-  "approvalStatus": "yes",
-  "cashBenefits": "222",
-  "birthdate": "11-01-2000",
-  "startDate": "12-22-2023",
-  "checkDate": "03-1-2024",
-  "description": "hello world",
-  "monthlyIncome": "3000",
-  "monthlyOutcome": "3200",
-  "researcher": "ali mahmoud",
-  "researchOpinion": "it deserve",
-  "boxCount": "1"
-}
+},
+// ========= store =================
+// start:
+// الثفقات
+[
+  {
+    "sector": "اجهزه كهربائيه",
+    "status": "دعم",
+    "type": "ثلاجه",
+    "count": "10",
+    "price": "5000",
+    "totalPrice": "50000",
+    "buyingTime": "02-03-2022",
+    "description": "اول صفقه او القيمه الابتدائيه",
+    "file": "http://....",
+  },
+  {
+    "sector": "تعريش",
+    "type": "ابواب",
+    "count": "10",
+    "price": "100",
+    "totalPrice": "50000",
+    "buyingTime": "02-03-2022",
+    "file": "http://....",
+    "description": "اول صفقه او القيمه الابتدائيه",
+  },
+  {
+    "type": "Botagas",
+    "count": "10",
+    "price": "290",
+    "totalPrice": "30030",
+    "buyingTime": "02-03-2022",
+    "file": "http://....",
+    "description": "اول صفقه او القيمه الابتدائيه",
+  }
+]
+// الموجود الفعلي
+[
+  {
+    "type": "Fridge",
+    "status": "new",
+    "countInStock": "20"
+  },
+  {
+    "type": "Fridge",
+    "status": "old",
+    "countInStock": "20"
+  },
+  {
+    "type": "Blender",
+    "countInStock": "5"
+  },
+  {
+    "type": "Botagas",
+    "countInStock": "2"
+  },
+  {
+    "type": "door",
+    "status": "old",
+    "countInStock": "44"
+  }
+]
+// المستفيدين
+[
+  {
+    "name": "ali",
+    "ssh": "88888",
+    "products": [
+      {
+        "type": "Fridge",
+        "status": "old",
+        "count": 1,
+      }
+    ],
+    "time": "11-01-2024",
+    "desc": "شيخ المسجد",
+  },
+  {
+    "caseId": "sdkfjsl44442klsdf",
+    "type": "Blender",
+    "count": 1,
+    "time": "11-01-2024",
+  },
+  {
+    "caseId": "sdkfjsl44442klsdf",
+    "type": "Botagas",
+    "count": 1,
+    "time": "11-01-2024",
+  },
+]
+// end.

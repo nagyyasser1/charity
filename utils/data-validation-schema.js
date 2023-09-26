@@ -178,6 +178,20 @@ const operationCaseShema = Joi.object({
   file: Joi.string().required(),
 });
 
+const productSchema = Joi.object({
+  category: Joi.string().valid("fridge", "botagas").required(),
+  status: Joi.string().valid("new", "old").required(),
+  countInStock: Joi.number().required(),
+});
+
+const benefitSchema = Joi.object({
+  ssh: Joi.number().required(),
+  name: Joi.string().required(),
+  time: Joi.date().required(),
+  desc: Joi.string(),
+  products: Joi.array().required(),
+});
+
 module.exports = {
   basicCaseDataSchema,
   monthlyCaseSchema,
@@ -187,4 +201,6 @@ module.exports = {
   treatmentCaseShema,
   furnitureCaseShema,
   operationCaseShema,
+  productSchema,
+  benefitSchema,
 };

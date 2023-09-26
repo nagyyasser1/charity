@@ -10,7 +10,7 @@ const caseDebtRouter = require("./routes/case.debt.router");
 const caseTreatmentRouter = require("./routes/case.treatment.router");
 const caseFurnitureRouter = require("./routes/case.furniture.router");
 const caseOperationRouter = require("./routes/case.operation.router");
-const boxRouter = require("./routes/box.route");
+const storeRouter = require("./routes/store.router");
 const { errorHandler } = require("./middleware/system/errorHandler");
 const notFound = require("./middleware/system/notFound");
 const rateLimiter = require("./middleware/system/rateLimit");
@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+// serve case routes
 app.use("/api/v1/case/monthly", caseMonthlyRouter);
 app.use("/api/v1/case/roof", caseRoofRouter);
 app.use("/api/v1/case/loan", caseLoanRouter);
@@ -37,7 +38,8 @@ app.use("/api/v1/case/furniture", caseFurnitureRouter);
 app.use("/api/v1/case/operation", caseOperationRouter);
 app.use("/api/v1/case", caseRouter);
 
-app.use("/api/v1/box", boxRouter);
+// serve store routes
+app.use("/api/v1/store", storeRouter);
 
 app.use(notFound);
 app.use(errorHandler);
