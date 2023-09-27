@@ -4,6 +4,7 @@ const {
   handleGetProducts,
   handleGetBenefits,
   handleAddDeal,
+  handleGetDeals,
 } = require("../controller/store.controller");
 const {
   validate_product_data,
@@ -14,10 +15,19 @@ const productExist = require("../middleware/store/productExist");
 
 const router = require("express").Router();
 
-router.post("/product", validate_product_data, productExist, handleAddProduct);
-router.get("/products", handleGetProducts);
-router.post("/benefit", validate_benefit_data, handleAddBenefit);
-router.get("/benefits", handleGetBenefits);
-router.post("/deal", validate_deal_data, handleAddDeal);
+router
+  .route("/product")
+  .post(validate_product_data, productExist, handleAddProduct)
+  .get(handleGetProducts);
+
+router
+  .route("/benefit")
+  .post(validate_benefit_data, handleAddBenefit)
+  .get(handleGetBenefits);
+
+router
+  .route("/deal")
+  .post(validate_deal_data, handleAddDeal)
+  .get(handleGetDeals);
 
 module.exports = router;

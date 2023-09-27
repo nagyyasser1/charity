@@ -106,10 +106,20 @@ const deleteOneCase = async (req, res, next) => {
   }
 };
 
+const handleDeleteAllCases = async (req, res, next) => {
+  try {
+    await Case.deleteMany({});
+    res.status(STATUS_CODES.SUCCESS);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   handleAddBasicCase,
   handleGetAllCases,
   handleGetCaseById,
   updateOneCase,
   deleteOneCase,
+  handleDeleteAllCases,
 };

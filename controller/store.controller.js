@@ -121,16 +121,18 @@ const handleAddDeal = async (req, res, next) => {
       file,
     });
 
-    if (newDeal != null) {
-      const existedProduct = await Product.findOne({ category, status });
-      if (!existedProduct) {
-        await Product.create({
-          category,
-          status,
-          countInStock: count,
-        });
-      }
-      existedProduct?.countInStock = existedProduct?.countInStock + count
+    const existedProduct = await Product.findOne({ category, status });
+
+    if (!existedProduct) {
+      await Product.create({
+        category,
+        status,
+        countInStock: count,
+      });
+    } else {
+      const prevCount = existedProduct.countInStock;
+      existedProduct.countInStock = prevCount + count;
+      await existedProduct.save();
     }
 
     res
@@ -141,9 +143,18 @@ const handleAddDeal = async (req, res, next) => {
   }
 };
 
-const handleGetDeals = async (req,res,next)=>{
-  
-}
+const handleGetDeals = async (req, res, next) => {
+  try {
+    const query = req.query;
+    const deals = await Deal.find(query);
+    if (!deals)
+      return res.status(STATUS_CODES.SUCCESS).json({ message: "no deals" });
+
+    res.status(STATUS_CODES.SUCCESS).json({ deals });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   handleAddProduct,
@@ -151,4 +162,5 @@ module.exports = {
   handleGetProducts,
   handleGetBenefits,
   handleAddDeal,
+  handleGetDeals,
 };
