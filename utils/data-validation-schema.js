@@ -153,13 +153,12 @@ const treatmentCaseShema = Joi.object({
 
 const deviceSchema = Joi.object({
   category: Joi.string().required(),
-  price: Joi.number().required(),
+  status: Joi.string().required(),
 });
 
 const furnitureCaseShema = Joi.object({
   approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
-  devices: Joi.array().items(deviceSchema).required(),
-  totalPrice: Joi.number().required(),
+  products: Joi.array().items(deviceSchema).required(),
 });
 
 const operationCaseShema = Joi.object({

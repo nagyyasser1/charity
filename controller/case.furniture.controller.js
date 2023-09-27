@@ -1,4 +1,6 @@
 const Case = require("../model/Case.model");
+const Product = require("../model/Product.model");
+const StoreBenefit = require("../model/StoreBenefit.model");
 const CASE_TYPES = require("../utils/caseTypes");
 const STATUS_CODES = require("../utils/statusCodes");
 
@@ -14,32 +16,73 @@ const handleAddFurniture = async (req, res, next) => {
     if (case_data?.furnitureInfo === undefined) {
       case_data.furnitureInfo = {
         items: [],
-        totalPrice: 0,
       };
     }
 
     let { items } = case_data.furnitureInfo;
 
-    const { devices, totalPrice, approvalStatus } = req.body;
+    const { products, approvalStatus } = req.body;
 
+    // ----------------
+
+    let errorMsgs = [];
+    let validProducts = [];
+
+    for (let i = 0; i < products.length; i++) {
+      const existedProduct = await Product.findOne({
+        category: products[i].category,
+        status: products[i].status,
+      });
+
+      if (!existedProduct) {
+        errorMsgs.push(`category "${products[i].category}" not exist`);
+        continue;
+      }
+
+      if (existedProduct?.countInStock <= 0) {
+        errorMsgs.push(`category ${products[i].category} has 0 count`);
+        continue;
+      }
+
+      if (existedProduct) {
+        existedProduct.countInStock--;
+        await existedProduct.save();
+        validProducts.push(products[i].category);
+      }
+    }
+
+    if (validProducts.length > 0) {
+      await StoreBenefit.create({
+        ssh: case_data?.ssh,
+        name: case_data?.info?.name,
+        products: validProducts,
+        time: Date.now(),
+        desc: "تجهيز عروسه من الحالات ",
+      });
+    }
+
+    //=========================
     const newFurnitureItem = {
-      devices,
-      totalPrice,
+      products: validProducts,
       approvalStatus,
     };
 
     items.push(newFurnitureItem);
 
     case_data.furnitureInfo.items = items;
-    case_data.furnitureInfo.totalPrice += +totalPrice;
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,
     });
 
-    res.status(STATUS_CODES.SUCCESS).json({
-      message: "furniture added to case",
-      caseData: updated_case,
+    res.status(STATUS_CODES.CREATED).json({
+      message: `${
+        validProducts.length > 0
+          ? validProducts?.join(",") + ", added successfully"
+          : ""
+      }`,
+      errMessage: `${errorMsgs?.join(",")}`,
+      case: updated_case,
     });
   } catch (error) {
     next(error);
