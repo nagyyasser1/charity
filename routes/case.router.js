@@ -3,6 +3,7 @@ const {
   handleGetAllCases,
   handleAddBasicCase,
   handleDeleteAllCases,
+  getCasesBySearch,
 } = require("../controller/case.controller");
 
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -11,6 +12,7 @@ const CASE_TYPES = require("../utils/caseTypes");
 const router = require("express").Router();
 
 // @route /case
+router.get("/search", getCasesBySearch);
 
 router
   .route("/")

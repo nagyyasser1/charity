@@ -35,17 +35,38 @@ const handleAddBasicCase = async (req, res, next) => {
 // @route Get /case
 // @access Privite
 const handleGetAllCases = async (req, res, next) => {
-  const queryParameters = req.query;
   try {
-    const query = buildQuery(queryParameters);
+    const result = await Case.find(req.query);
 
-    const result = await Case.find(query).lean();
+    if (!result) throw new CustomError(STATUS_CODES.NOT_FOUND, "not found");
 
-    res
-      .status(STATUS_CODES.SUCCESS)
-      .json({ count: result.length, cases: result });
+    if (result.length === 1)
+      return res
+        .status(STATUS_CODES.SUCCESS)
+        .json({ message: "ok", case: result[0] });
+
+    if (result.length === 0)
+      return res
+        .status(STATUS_CODES.SUCCESS)
+        .json({ message: "not found", case: null });
+
+    res.status(STATUS_CODES.SUCCESS).json({ count: result.length, result });
   } catch (err) {
     next(err);
+  }
+};
+
+const getCasesBySearch = async (req, res) => {
+  const { nameQuery } = req.query; // Destructure the 'nameQuery' from req.query.
+
+  try {
+    const nameRegex = new RegExp(nameQuery, "i");
+
+    const cases = await Case.find({ "info.name": nameRegex });
+
+    res.status(STATUS_CODES.SUCCESS).json({ count: cases.length, cases });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -122,4 +143,5 @@ module.exports = {
   updateOneCase,
   deleteOneCase,
   handleDeleteAllCases,
+  getCasesBySearch,
 };
