@@ -165,7 +165,7 @@
   {
     "sector": "اجهزه كهربائيه",
     "status": "دعم",
-    "type": "ثلاجه",
+    "category": "ثلاجه",
     "count": "10",
     "price": "5000",
     "totalPrice": "50000",

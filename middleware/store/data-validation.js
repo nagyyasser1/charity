@@ -1,6 +1,7 @@
 const {
   productSchema,
   benefitSchema,
+  dealSchema,
 } = require("../../utils/data-validation-schema");
 
 const { CustomError } = require("../system/errorHandler");
@@ -36,7 +37,23 @@ function validate_benefit_data(req, res, next) {
   }
 }
 
+function validate_deal_data(req, res, next) {
+  const dataToBeValidate = { ...req.body };
+
+  var { error } = dealSchema.validate(dataToBeValidate, {
+    allowUnknown: true,
+    abortEarly: false,
+  });
+
+  if (error) {
+    throw new CustomError(STATUS_CODES.BAD_REQUEST, error.details[0].message);
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   validate_product_data,
   validate_benefit_data,
+  validate_deal_data,
 };

@@ -192,6 +192,19 @@ const benefitSchema = Joi.object({
   products: Joi.array().required(),
 });
 
+const dealSchema = Joi.object({
+  sector: Joi.string().required(),
+  dealType: Joi.string().required(),
+  category: Joi.string().required(),
+  status: Joi.string().required(),
+  count: Joi.number().required(),
+  price: Joi.number().required(),
+  totalPrice: Joi.number().required(),
+  date: Joi.date().required(),
+  desc: Joi.number(),
+  file: Joi.string().required(),
+});
+
 module.exports = {
   basicCaseDataSchema,
   monthlyCaseSchema,
@@ -203,4 +216,5 @@ module.exports = {
   operationCaseShema,
   productSchema,
   benefitSchema,
+  dealSchema,
 };
