@@ -9,25 +9,19 @@ const handleAddFurniture = async (req, res, next) => {
     const { caseId } = req.params;
     let { case_data } = res.locals;
 
-    if (!case_data?.caseType?.includes(CASE_TYPES.FURNITURE)) {
-      case_data.caseType.push(CASE_TYPES.FURNITURE);
-    }
-
-    if (case_data?.furnitureInfo === undefined) {
-      case_data.furnitureInfo = {
-        items: [],
-      };
-    }
-
-    let { items } = case_data.furnitureInfo;
-
-    const { products, approvalStatus } = req.body;
-
-    // ----------------
+    const {
+      products,
+      approvalStatus,
+      name,
+      researcher,
+      researchDate,
+      helpDate,
+    } = req.body;
 
     let errorMsgs = [];
     let validProducts = [];
 
+    // validates products
     for (let i = 0; i < products.length; i++) {
       const existedProduct = await Product.findOne({
         category: products[i].category,
@@ -51,6 +45,7 @@ const handleAddFurniture = async (req, res, next) => {
       }
     }
 
+    // add benefit
     if (validProducts.length > 0) {
       await StoreBenefit.create({
         ssh: case_data?.ssh,
@@ -61,15 +56,30 @@ const handleAddFurniture = async (req, res, next) => {
       });
     }
 
-    //=========================
-    const newFurnitureItem = {
-      products: validProducts,
-      approvalStatus,
-    };
+    if (validProducts.length > 0) {
+      if (!case_data?.caseType?.includes(CASE_TYPES.FURNITURE)) {
+        case_data.caseType.push(CASE_TYPES.FURNITURE);
+      }
 
-    items.push(newFurnitureItem);
+      if (case_data?.furnitureInfo === undefined) {
+        case_data.furnitureInfo = {
+          items: [],
+        };
+      }
 
-    case_data.furnitureInfo.items = items;
+      let { items } = case_data.furnitureInfo;
+
+      const newFurnitureItem = {
+        name,
+        researcher,
+        researchDate,
+        helpDate,
+        products: validProducts,
+        approvalStatus,
+      };
+      items.push(newFurnitureItem);
+      case_data.furnitureInfo.items = items;
+    }
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,

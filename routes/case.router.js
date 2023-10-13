@@ -4,6 +4,7 @@ const {
   handleAddBasicCase,
   handleDeleteAllCases,
   getCasesBySearch,
+  updateOneCase,
 } = require("../controller/case.controller");
 
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -20,6 +21,6 @@ router
   .get(handleGetAllCases)
   .delete(handleDeleteAllCases);
 
-router.route("/:id").get(handleGetCaseById);
+router.route("/:id").put(updateOneCase).get(handleGetCaseById);
 
 module.exports = router;

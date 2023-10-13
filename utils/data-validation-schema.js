@@ -29,7 +29,7 @@ const dependentSchema = Joi.object({
 const monthlyCaseSchema = Joi.object({
   socialStatus: Joi.string().valid("poor", "widows", "orphans").required(),
   sector: Joi.string().valid("foundation", "factory").required(),
-  approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
+  approvalStatus: Joi.string().valid("yes", "no", "waiting").trim().required(),
   cashBenefits: Joi.number().required(),
   bouns: Joi.number(),
   birthdate: Joi.date().required(),
@@ -37,7 +37,7 @@ const monthlyCaseSchema = Joi.object({
   checkResearchDate: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.date().required(),
-    otherwise: Joi.number().optional(),
+    otherwise: Joi.date().optional(),
   }),
   description: Joi.string().required(),
   monthlyIncome: Joi.when("approvalStatus", {
@@ -53,12 +53,12 @@ const monthlyCaseSchema = Joi.object({
   researcher: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.string().required().trim(),
-    otherwise: Joi.number().optional(),
+    otherwise: Joi.string().optional(),
   }),
   researchOpinion: Joi.when("approvalStatus", {
     is: "yes",
     then: Joi.string().required(),
-    otherwise: Joi.number().optional(),
+    otherwise: Joi.string().optional(),
   }),
   boxCount: Joi.when("approvalStatus", {
     is: "yes",
@@ -157,6 +157,10 @@ const deviceSchema = Joi.object({
 });
 
 const furnitureCaseShema = Joi.object({
+  name: Joi.string().required(),
+  researcher: Joi.string().required(),
+  researchDate: Joi.date().required(),
+  helpDate: Joi.date().required(),
   approvalStatus: Joi.string().valid("yes", "no", "wating").trim().required(),
   products: Joi.array().items(deviceSchema).required(),
 });
@@ -178,9 +182,14 @@ const operationCaseShema = Joi.object({
 });
 
 const productSchema = Joi.object({
-  category: Joi.string().valid("fridge", "botagas").required(),
-  status: Joi.string().valid("new", "old").required(),
+  category: Joi.string().required(),
+  status: Joi.string().required(),
   countInStock: Joi.number().required(),
+});
+
+const benefitProduct = Joi.object({
+  category: Joi.string().required(),
+  status: Joi.string().required(),
 });
 
 const benefitSchema = Joi.object({
@@ -188,7 +197,7 @@ const benefitSchema = Joi.object({
   name: Joi.string().required(),
   time: Joi.date().required(),
   desc: Joi.string(),
-  products: Joi.array().required(),
+  products: Joi.array().items(benefitProduct).required(),
 });
 
 const dealSchema = Joi.object({

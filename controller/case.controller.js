@@ -89,16 +89,11 @@ const updateOneCase = async (req, res, next) => {
   try {
     const caseId = req.params.id;
     var dataToBeUpdate = req.body;
+
     const prevCase = await Case.findById(caseId);
 
     if (!prevCase)
       throw new CustomError(STATUS_CODES.NOT_FOUND, `${caseId}:not Found!`);
-
-    if (req?.files?.File != undefined) {
-      removeFileInUploadsLocal(prevCase.filePath);
-      const filePath = handleFileUploadLocal(req.files.File);
-      dataToBeUpdate = { ...req.body, filePath };
-    }
 
     const updatedCase = await Case.findByIdAndUpdate(caseId, dataToBeUpdate, {
       new: true,
