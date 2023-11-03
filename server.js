@@ -11,6 +11,7 @@ const caseTreatmentRouter = require("./routes/case.treatment.router");
 const caseFurnitureRouter = require("./routes/case.furniture.router");
 const caseOperationRouter = require("./routes/case.operation.router");
 const storeRouter = require("./routes/store.router");
+const townRouter = require("./routes/town.router");
 const { errorHandler } = require("./middleware/system/errorHandler");
 const notFound = require("./middleware/system/notFound");
 const rateLimiter = require("./middleware/system/rateLimit");
@@ -40,6 +41,9 @@ app.use("/api/v1/case", caseRouter);
 
 // serve store routes
 app.use("/api/v1/store", storeRouter);
+
+// serve towns routes
+app.use("/api/v1/town", townRouter);
 
 app.use(notFound);
 app.use(errorHandler);

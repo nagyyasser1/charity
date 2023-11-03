@@ -27,6 +27,7 @@ const handleAddDebt = async (req, res, next) => {
       paidAmount,
       restAmount,
       amountFromFoundation,
+      paidFromFoundation,
       description,
       startDate,
       endDate,
@@ -45,9 +46,10 @@ const handleAddDebt = async (req, res, next) => {
       paidAmount,
       restAmount,
       amountFromFoundation,
+      paidFromFoundation,
       description,
-      startDate,
-      endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       finished,
       researcher,
       debtMan,
@@ -77,10 +79,10 @@ const handleAddDebt = async (req, res, next) => {
 const handleSelectDebtCases = async (req, res, next) => {
   try {
     const debt_cases = await Case.find({ caseType: { $in: ["debt"] } });
-    // if (!loan_cases || loan_cases?.length <= 0)
+    // if (!debt_cases || debt_cases?.length <= 0)
     //   throw new CustomError(
     //     STATUS_CODES.NOT_FOUND,
-    //     "there is no loan cases"
+    //     "there is no debt cases"
     //   );
     res.status(STATUS_CODES.SUCCESS).json({
       message: "success",
@@ -91,7 +93,118 @@ const handleSelectDebtCases = async (req, res, next) => {
   }
 };
 
+const handleGetDebtStatistics = async (req, res, next) => {
+  try {
+    const queryDateStr = req.query.startDate;
+    const comparisonOperator = req.query.comparisonOperator;
+
+    if (!queryDateStr || !comparisonOperator) {
+      return res
+        .status(400)
+        .send("Both startDate and comparisonOperator are required");
+    }
+
+    const queryDate = new Date(queryDateStr);
+
+    let currentAggregationPipeline = [
+      {
+        $match: {
+          caseType: "debt",
+          "debtInfo.items.approvalStatus": "yes",
+          "debtInfo.items.finished": false,
+        },
+      },
+      {
+        $unwind: "$debtInfo.items",
+      },
+      {
+        $match: {
+          "debtInfo.items.approvalStatus": "yes",
+          "debtInfo.items.finished": false,
+        },
+      },
+    ];
+
+    let finishedAggregationPipeline = [
+      {
+        $match: {
+          caseType: "debt",
+          "debtInfo.items.approvalStatus": "yes",
+          "debtInfo.items.finished": true,
+        },
+      },
+      {
+        $unwind: "$debtInfo.items",
+      },
+      {
+        $match: {
+          "debtInfo.items.approvalStatus": "yes",
+          "debtInfo.items.finished": true,
+        },
+      },
+    ];
+
+    const dateFilter = {
+      gt: { $gt: queryDate },
+      lt: { $lt: queryDate },
+    };
+
+    if (dateFilter[comparisonOperator]) {
+      currentAggregationPipeline.push({
+        $match: {
+          "debtInfo.items.startDate": dateFilter[comparisonOperator],
+        },
+      });
+
+      finishedAggregationPipeline.push({
+        $match: {
+          "debtInfo.items.startDate": dateFilter[comparisonOperator],
+        },
+      });
+    }
+
+    currentAggregationPipeline.push({
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        totalAmountFromFoundation: {
+          $sum: "$debtInfo.items.amountFromFoundation",
+        },
+        totalPaidFromFoundation: {
+          $sum: "$debtInfo.items.paidFromFoundation",
+        },
+      },
+    });
+
+    finishedAggregationPipeline.push({
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        totalAmountFromFoundation: {
+          $sum: "$debtInfo.items.amountFromFoundation",
+        },
+        totalPaidFromFoundation: {
+          $sum: "$debtInfo.items.paidFromFoundation",
+        },
+      },
+    });
+
+    const currentStatistics = await Case.aggregate(currentAggregationPipeline);
+    const finishedstatistics = await Case.aggregate(
+      finishedAggregationPipeline
+    );
+
+    res.status(200).json({
+      current: currentStatistics[0],
+      finished: finishedstatistics[0],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   handleAddDebt,
   handleSelectDebtCases,
+  handleGetDebtStatistics,
 };

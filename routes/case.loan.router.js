@@ -1,6 +1,7 @@
 const {
   handleAddLoanToCase,
   handleSelectLoanCases,
+  handleGetLoanStatistics,
 } = require("../controller/case.loan.controller");
 const caseExist = require("../middleware/case/caseExist");
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -16,4 +17,6 @@ router.post(
 );
 
 router.get("/", handleSelectLoanCases);
+
+router.get("/statistics", handleGetLoanStatistics);
 module.exports = router;

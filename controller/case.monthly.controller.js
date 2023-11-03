@@ -3,9 +3,6 @@ const Case = require("../model/Case.model");
 const CASE_TYPES = require("../utils/caseTypes");
 const STATUS_CODES = require("../utils/statusCodes");
 
-// @desc Assign Monthy Case
-// @route POST /case/monthy
-// @access Private
 const handleAddMonthlyDataToCase = async (req, res, next) => {
   try {
     const { case_data } = res.locals;
@@ -17,7 +14,11 @@ const handleAddMonthlyDataToCase = async (req, res, next) => {
       );
 
     case_data.caseType.push(CASE_TYPES.MONTHLY);
-    case_data.monthlyInfo = req.body;
+    case_data.monthlyInfo = {
+      ...req.body,
+      birthdate: new Date(req.body.birthdate),
+      startDate: new Date(req.body.startDate),
+    };
     const updated_case = await case_data.save();
 
     res.status(STATUS_CODES.CREATED).json({
@@ -84,77 +85,106 @@ const handleSelectMonthlyCases = async (req, res, next) => {
 
 const handleGetMonthlyStatistics = async (req, res, next) => {
   try {
-    // Query to get statistics
-    const statistics = await Case.aggregate([
+    const queryDateStr = req.query.startDate;
+    const comparisonOperator = req.query.comparisonOperator;
+
+    if (!queryDateStr || !comparisonOperator) {
+      return res
+        .status(400)
+        .send("Both startDate and comparisonOperator are required");
+    }
+
+    const queryDate = new Date(queryDateStr);
+
+    const dateFilter = {
+      gt: { $gt: queryDate },
+      lt: { $lt: queryDate },
+    };
+
+    const foundationStatistics = await Case.aggregate([
       {
         $match: {
           caseType: "monthly",
+          "monthlyInfo.approvalStatus": "yes",
+          "monthlyInfo.sector": "foundation",
+          "monthlyInfo.startDate": dateFilter[comparisonOperator],
         },
       },
       {
         $group: {
           _id: null,
-          countAllMonthlyCases: { $sum: 1 },
-          countPoorSocialStatus: {
+          count: { $sum: 1 },
+          poor_count: {
             $sum: {
               $cond: [{ $eq: ["$monthlyInfo.socialStatus", "poor"] }, 1, 0],
             },
           },
-          countOrphanSocialStatus: {
+          orphan_count: {
             $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "orphans"] }, 1, 0],
+              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "orphan"] }, 1, 0],
             },
           },
-          countWidowsSocialStatus: {
+          widow_count: {
             $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "widows"] }, 1, 0],
-            },
-          },
-          countFoundationSector: {
-            $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.sector", "foundation"] }, 1, 0],
-            },
-          },
-          countFactorySector: {
-            $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.sector", "factory"] }, 1, 0],
-            },
-          },
-          countYesApprovalStatus: {
-            $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.approvalStatus", "yes"] }, 1, 0],
-            },
-          },
-          countNoApprovalStatus: {
-            $sum: {
-              $cond: [{ $eq: ["$monthlyInfo.approvalStatus", "no"] }, 1, 0],
-            },
-          },
-          countWaitingApprovalStatus: {
-            $sum: {
-              $cond: [
-                { $eq: ["$monthlyInfo.approvalStatus", "waiting"] },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "widow"] }, 1, 0],
             },
           },
           totalCashBenefits: { $sum: "$monthlyInfo.cashBenefits" },
           totalBoxCount: { $sum: "$monthlyInfo.boxCount" },
-          countAllDependents: {
-            $sum: {
-              $cond: [
-                { $isArray: "$monthlyInfo.dependents" },
-                { $size: "$monthlyInfo.dependents" },
-                0,
-              ],
-            },
-          },
         },
       },
     ]);
 
-    res.status(200).json(statistics[0]);
+    const factoryStatistics = await Case.aggregate([
+      {
+        $match: {
+          caseType: "monthly",
+          "monthlyInfo.approvalStatus": "yes",
+          "monthlyInfo.sector": "factory",
+          "monthlyInfo.startDate": dateFilter[comparisonOperator],
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+          poor_count: {
+            $sum: {
+              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "poor"] }, 1, 0],
+            },
+          },
+          orphan_count: {
+            $sum: {
+              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "orphan"] }, 1, 0],
+            },
+          },
+          widow_count: {
+            $sum: {
+              $cond: [{ $eq: ["$monthlyInfo.socialStatus", "widow"] }, 1, 0],
+            },
+          },
+          totalCashBenefits: { $sum: "$monthlyInfo.cashBenefits" },
+          totalBoxCount: { $sum: "$monthlyInfo.boxCount" },
+        },
+      },
+    ]);
+
+    const countWaiting = await Case.find({
+      "monthlyInfo.approvalStatus": "waiting",
+    }).count();
+    const countNo = await Case.find({
+      "monthlyInfo.approvalStatus": "no",
+    }).count();
+
+    res.status(200).json({
+      foundation: foundationStatistics[0],
+      factory: factoryStatistics[0],
+
+      extra: {
+        waitingCount: countWaiting,
+        NoCount: countNo,
+      },
+    });
   } catch (error) {
     next(error);
   }

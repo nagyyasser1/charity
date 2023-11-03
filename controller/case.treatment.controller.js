@@ -32,19 +32,19 @@ const handleAddTreatment = async (req, res, next) => {
       monthly,
     } = req.body;
 
-    const newLoanItem = {
+    const newTreatmentItem = {
       approvalStatus,
       isUrgent,
       name,
       price,
       researcher,
-      startDate,
+      startDate: new Date(startDate),
       description,
       monthly,
       finished,
     };
 
-    items.push(newLoanItem);
+    items.push(newTreatmentItem);
 
     case_data.treatmentInfo.items = items;
     case_data.treatmentInfo.totalPrice += +price;
@@ -53,10 +53,9 @@ const handleAddTreatment = async (req, res, next) => {
       new: true,
     });
 
-    res.status(STATUS_CODES.SUCCESS).json({
-      message: "treatment added to case",
-      caseData: updated_case,
-    });
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ message: "treatment added to case", caseData: updated_case });
   } catch (error) {
     next(error);
   }
@@ -65,17 +64,124 @@ const handleAddTreatment = async (req, res, next) => {
 const handleSelectTreatmentCases = async (req, res, next) => {
   try {
     const treatment_cases = await Case.find({
-      caseType: { $in: ["treatment"] },
+      caseType: {
+        $in: ["treatment"],
+      },
     });
     // if (!monthly_cases || monthly_cases?.length <= 0)
-    //   throw new CustomError(
+    // throw new CustomError(
     //     STATUS_CODES.NOT_FOUND,
     //     "there is no monthly cases"
-    //   );
-    res.status(STATUS_CODES.SUCCESS).json({
-      message: "success",
-      treatment_cases,
+    // );
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ message: "success", treatment_cases });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const handleGetTreatmentStatistics = async (req, res, next) => {
+  try {
+    const queryDateStr = req.query.startDate;
+    const comparisonOperator = req.query.comparisonOperator;
+
+    if (!queryDateStr || !comparisonOperator) {
+      return res
+        .status(400)
+        .send("Both startDate and comparisonOperator are required");
+    }
+
+    const queryDate = new Date(queryDateStr);
+
+    let aggregationPipeline = [
+      {
+        $match: {
+          caseType: "treatment",
+        },
+      },
+      {
+        $unwind: "$treatmentInfo.items",
+      },
+    ];
+
+    if (comparisonOperator === "gt") {
+      aggregationPipeline.push({
+        $match: {
+          "treatmentInfo.items.startDate": {
+            $gt: queryDate,
+          },
+        },
+      });
+    } else if (comparisonOperator === "lt") {
+      aggregationPipeline.push({
+        $match: {
+          "treatmentInfo.items.dstartDate": {
+            $lt: queryDate,
+          },
+        },
+      });
+    }
+
+    aggregationPipeline.push({
+      $group: {
+        _id: null,
+        countAllTreatments: {
+          $sum: 1,
+        },
+        countYesTreatments: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$treatmentInfo.items.approvalStatus", "yes"],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        countNoTreatments: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$treatmentInfo.items.approvalStatus", "no"],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        countWaitingTreatments: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$treatmentInfo.items.approvalStatus", "waiting"],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        totalCostForYesCurrentFromFoundation: {
+          $sum: {
+            $cond: [
+              {
+                $and: [
+                  { $eq: ["$treatmentInfo.items.approvalStatus", "yes"] },
+                  { $eq: ["$treatmentInfo.items.finished", false] },
+                ],
+              },
+              "$treatmentInfo.items.price",
+              0,
+            ],
+          },
+        },
+      },
     });
+
+    const statistics = await Case.aggregate(aggregationPipeline);
+
+    res.status(200).json(statistics[0]);
   } catch (error) {
     next(error);
   }
@@ -84,4 +190,5 @@ const handleSelectTreatmentCases = async (req, res, next) => {
 module.exports = {
   handleAddTreatment,
   handleSelectTreatmentCases,
+  handleGetTreatmentStatistics,
 };

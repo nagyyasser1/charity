@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   handleAddTreatment,
   handleSelectTreatmentCases,
+  handleGetTreatmentStatistics,
 } = require("../controller/case.treatment.controller");
 const caseExist = require("../middleware/case/caseExist");
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -15,5 +16,6 @@ router.post(
 );
 
 router.get("/", handleSelectTreatmentCases);
+router.get("/statistics", handleGetTreatmentStatistics);
 
 module.exports = router;

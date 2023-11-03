@@ -1,6 +1,7 @@
 const {
   handleSelectOperationCases,
   handleAddOperation,
+  handleGetOperationStatistics,
 } = require("../controller/case.operation.controller");
 const caseExist = require("../middleware/case/caseExist");
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -16,5 +17,6 @@ router.post(
 );
 
 router.get("/", handleSelectOperationCases);
+router.get("/statistics", handleGetOperationStatistics);
 
 module.exports = router;

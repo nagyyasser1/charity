@@ -157,7 +157,7 @@
     ],
     "totalPrice": "10000"
   }
-},
+}.
 // ========= store =================
 // start:
 // الثفقات
@@ -248,13 +248,37 @@
   },
 ]
 
+
 {
-  1.get the count of storebenefits if they are frinuatue or not
-  2.get the count of dependents
-  3.get the count of monthly etc.
-  4.filter with date.
-  5.roof total cout , filter with date.
-  6.count of arayes , date.
-  7.add desc to dependent.
+  // "montly": [
+  //   1>"spcifiy  montly cases to thier sector".
+  // ],
+  // "study_help": [
+  //   1>"".
+  // ],
+  // "roof": [
+  //   1>"select country."
+  // ],
+  // "debt": [
+  // 1->"paidAmountFromFoundation": 100
+  //   1>"count all debt case",
+  //   1>"count all debt",
+  //   1>"cost from foundation",
+  //   1>"paid cost from foundation"
+  // ],
+  // "furniture": [
+  //   1>"count all ",
+  //   1>"to whom"
+  // ],
+  "treatment": [
+    1>"count all case that have treatement",
+    1>"cost",
+    1>"waiting",
+    1>""
+  ],
+  "opertions": [
+    1<"count all operaions",
+    1>"cost"
+  ]
 }
 // end.

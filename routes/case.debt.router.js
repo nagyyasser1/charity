@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   handleAddDebt,
   handleSelectDebtCases,
+  handleGetDebtStatistics,
 } = require("../controller/case.debt.controller");
 const caseExist = require("../middleware/case/caseExist");
 const { validate_case_data } = require("../middleware/case/data-validation");
@@ -15,5 +16,6 @@ router.post(
 );
 
 router.get("/", handleSelectDebtCases);
+router.get("/statistics", handleGetDebtStatistics);
 
 module.exports = router;
