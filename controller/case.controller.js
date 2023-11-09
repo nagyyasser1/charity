@@ -2,14 +2,6 @@ const { CustomError } = require("../middleware/system/errorHandler");
 const Case = require("../model/Case.model");
 const buildQuery = require("../utils/buildQuery");
 
-const {
-  removeFileInUploadsLocal,
-  removeFileFromCloudinary,
-} = require("../utils/handleFileDelete");
-const {
-  handleFileUploadLocal,
-  handleFileUploadOnCloudinary,
-} = require("../utils/handleFileUpload");
 const STATUS_CODES = require("../utils/statusCodes");
 
 // @desc Create Mew Basic Case
