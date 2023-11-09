@@ -16,6 +16,7 @@ router.post(
   handleAddRoofDataToCase
 );
 
+// router.post("/file/:caseId");
 router.get("/", handleSelectRoofCases);
 router.get("/statistics", handleGetRoofStatistics);
 

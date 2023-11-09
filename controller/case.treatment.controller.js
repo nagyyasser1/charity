@@ -12,13 +12,10 @@ const handleAddTreatment = async (req, res, next) => {
     }
 
     if (case_data?.treatmentInfo === undefined) {
-      case_data.treatmentInfo = {
-        items: [],
-        totalPrice: 0,
-      };
+      case_data.treatmentInfo = [];
     }
 
-    let { items } = case_data.treatmentInfo;
+    let { treatmentInfo } = case_data;
 
     const {
       approvalStatus,
@@ -44,10 +41,9 @@ const handleAddTreatment = async (req, res, next) => {
       finished,
     };
 
-    items.push(newTreatmentItem);
+    treatmentInfo.push(newTreatmentItem);
 
-    case_data.treatmentInfo.items = items;
-    case_data.treatmentInfo.totalPrice += +price;
+    case_data.treatmentInfo = treatmentInfo;
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,
@@ -101,14 +97,14 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
         },
       },
       {
-        $unwind: "$treatmentInfo.items",
+        $unwind: "$treatmentInfo",
       },
     ];
 
     if (comparisonOperator === "gt") {
       aggregationPipeline.push({
         $match: {
-          "treatmentInfo.items.startDate": {
+          "treatmentInfo.startDate": {
             $gt: queryDate,
           },
         },
@@ -116,7 +112,7 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
     } else if (comparisonOperator === "lt") {
       aggregationPipeline.push({
         $match: {
-          "treatmentInfo.items.dstartDate": {
+          "treatmentInfo.dstartDate": {
             $lt: queryDate,
           },
         },
@@ -133,7 +129,7 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$treatmentInfo.items.approvalStatus", "yes"],
+                $eq: ["$treatmentInfo.approvalStatus", "yes"],
               },
               1,
               0,
@@ -144,7 +140,7 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$treatmentInfo.items.approvalStatus", "no"],
+                $eq: ["$treatmentInfo.approvalStatus", "no"],
               },
               1,
               0,
@@ -155,7 +151,7 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$treatmentInfo.items.approvalStatus", "waiting"],
+                $eq: ["$treatmentInfo.approvalStatus", "waiting"],
               },
               1,
               0,
@@ -167,11 +163,11 @@ const handleGetTreatmentStatistics = async (req, res, next) => {
             $cond: [
               {
                 $and: [
-                  { $eq: ["$treatmentInfo.items.approvalStatus", "yes"] },
-                  { $eq: ["$treatmentInfo.items.finished", false] },
+                  { $eq: ["$treatmentInfo.approvalStatus", "yes"] },
+                  { $eq: ["$treatmentInfo.finished", false] },
                 ],
               },
-              "$treatmentInfo.items.price",
+              "$treatmentInfo.price",
               0,
             ],
           },

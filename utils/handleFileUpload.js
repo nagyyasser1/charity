@@ -37,5 +37,4 @@ function handleFileUploadOnCloudinary(file) {
 
 module.exports = {
   handleFileUploadLocal,
-  handleFileUploadOnCloudinary,
 };

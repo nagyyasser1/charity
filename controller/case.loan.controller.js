@@ -12,13 +12,10 @@ const handleAddLoanToCase = async (req, res, next) => {
     }
 
     if (case_data?.loanInfo === undefined) {
-      case_data.loanInfo = {
-        items: [],
-        totalPrice: 0,
-      };
+      case_data.loanInfo = [];
     }
 
-    let { items } = case_data.loanInfo;
+    let { loanInfo } = case_data;
 
     const {
       approvalStatus,
@@ -52,10 +49,9 @@ const handleAddLoanToCase = async (req, res, next) => {
       file,
     };
 
-    items.push(newLoanItem);
+    loanInfo.push(newLoanItem);
 
-    case_data.loanInfo.items = items;
-    case_data.loanInfo.totalPrice += +req.body.cost;
+    case_data.loanInfo = loanInfo;
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,
@@ -74,7 +70,7 @@ const handleSelectLoanCases = async (req, res, next) => {
   try {
     const queryCriteria = {
       caseType: "loan",
-      "loanInfo.items": {
+      loanInfo: {
         $elemMatch: {},
       },
     };
@@ -83,17 +79,14 @@ const handleSelectLoanCases = async (req, res, next) => {
       console.log(key);
       switch (key) {
         case "approvalStatus":
-          queryCriteria["loanInfo.items.$elemMatch.approvalStatus"] =
-            req.query[key];
+          queryCriteria["loanInfo.$elemMatch.approvalStatus"] = req.query[key];
           break;
         case "isUrgent":
-          queryCriteria["loanInfo.items.$elemMatch.isUrgent"] =
+          queryCriteria["loanInfo.$elemMatch.isUrgent"] =
             req.query[key] === "true"; // Assuming it's a boolean
           break;
         case "cost":
-          queryCriteria["loanInfo.items.$elemMatch.cost"] = parseInt(
-            req.query[key]
-          ); // Parse to an integer
+          queryCriteria["loanInfo.$elemMatch.cost"] = parseInt(req.query[key]); // Parse to an integer
           break;
       }
     }
@@ -127,17 +120,17 @@ const handleGetLoanStatistics = async (req, res, next) => {
       {
         $match: {
           caseType: "loan",
-          "loanInfo.items.approvalStatus": "yes",
-          "loanInfo.items.finished": false,
+          "loanInfo.approvalStatus": "yes",
+          "loanInfo.finished": false,
         },
       },
       {
-        $unwind: "$loanInfo.items",
+        $unwind: "$loanInfo",
       },
       {
         $match: {
-          "loanInfo.items.approvalStatus": "yes",
-          "loanInfo.items.finished": false,
+          "loanInfo.approvalStatus": "yes",
+          "loanInfo.finished": false,
         },
       },
     ];
@@ -145,13 +138,13 @@ const handleGetLoanStatistics = async (req, res, next) => {
     if (comparisonOperator === "gt") {
       aggregationPipeline.push({
         $match: {
-          "loanInfo.items.startDate": { $gt: queryDate },
+          "loanInfo.startDate": { $gt: queryDate },
         },
       });
     } else if (comparisonOperator === "lt") {
       aggregationPipeline.push({
         $match: {
-          "loanInfo.items.startDate": { $lt: queryDate },
+          "loanInfo.startDate": { $lt: queryDate },
         },
       });
     }
@@ -160,42 +153,42 @@ const handleGetLoanStatistics = async (req, res, next) => {
       $group: {
         _id: null,
         count: { $sum: 1 },
-        totalCost: { $sum: "$loanInfo.items.cost" },
-        totalRecievedMoney: { $sum: "$loanInfo.items.paid" },
-        totalRest: { $sum: "$loanInfo.items.rest" },
+        totalCost: { $sum: "$loanInfo.cost" },
+        totalRecievedMoney: { $sum: "$loanInfo.paid" },
+        totalRest: { $sum: "$loanInfo.rest" },
       },
     });
 
     const currentStatistics = await Case.aggregate(aggregationPipeline);
 
     const waitingCount = await Case.find({
-      "loanInfo.items.approvalStatus": "waiting",
+      "loanInfo.approvalStatus": "waiting",
     }).count();
 
     const finishedStatistics = await Case.aggregate([
       {
         $match: {
           caseType: "loan",
-          "loanInfo.items.approvalStatus": "yes",
-          "loanInfo.items.finished": true,
+          "loanInfo.approvalStatus": "yes",
+          "loanInfo.finished": true,
         },
       },
       {
-        $unwind: "$loanInfo.items",
+        $unwind: "$loanInfo",
       },
       {
         $match: {
-          "loanInfo.items.approvalStatus": "yes",
-          "loanInfo.items.finished": true,
+          "loanInfo.approvalStatus": "yes",
+          "loanInfo.finished": true,
         },
       },
       {
         $group: {
           _id: null,
           count: { $sum: 1 },
-          paidFromFoundation: { $sum: "$loanInfo.items.cost" },
-          totalReceivedMoney: { $sum: "$loanInfo.items.paid" },
-          totalRest: { $sum: "$loanInfo.items.rest" },
+          paidFromFoundation: { $sum: "$loanInfo.cost" },
+          totalReceivedMoney: { $sum: "$loanInfo.paid" },
+          totalRest: { $sum: "$loanInfo.rest" },
         },
       },
     ]);

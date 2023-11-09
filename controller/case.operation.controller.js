@@ -12,13 +12,10 @@ const handleAddOperation = async (req, res, next) => {
     }
 
     if (case_data?.operationInfo === undefined) {
-      case_data.operationInfo = {
-        items: [],
-        totalPrice: 0,
-      };
+      case_data.operationInfo = [];
     }
 
-    let { items } = case_data.operationInfo;
+    let { operationInfo } = case_data;
 
     const {
       approvalStatus,
@@ -52,10 +49,9 @@ const handleAddOperation = async (req, res, next) => {
       file,
     };
 
-    items.push(newOperationItem);
+    operationInfo.push(newOperationItem);
 
-    case_data.operationInfo.items = items;
-    case_data.operationInfo.totalPrice += +costFromFoundation;
+    case_data.operationInfo = operationInfo;
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,
@@ -109,20 +105,20 @@ const handleGetOperationStatistics = async (req, res, next) => {
         },
       },
       {
-        $unwind: "$operationInfo.items",
+        $unwind: "$operationInfo",
       },
     ];
 
     if (comparisonOperator === "gt") {
       aggregationPipeline.push({
         $match: {
-          "operationInfo.items.date": { $gt: queryDate },
+          "operationInfo.date": { $gt: queryDate },
         },
       });
     } else if (comparisonOperator === "lt") {
       aggregationPipeline.push({
         $match: {
-          "operationInfo.items.date": { $lt: queryDate },
+          "operationInfo.date": { $lt: queryDate },
         },
       });
     }
@@ -133,26 +129,18 @@ const handleGetOperationStatistics = async (req, res, next) => {
         countAllOperations: { $sum: 1 },
         countYesOperations: {
           $sum: {
-            $cond: [
-              { $eq: ["$operationInfo.items.approvalStatus", "yes"] },
-              1,
-              0,
-            ],
+            $cond: [{ $eq: ["$operationInfo.approvalStatus", "yes"] }, 1, 0],
           },
         },
         countNoOperations: {
           $sum: {
-            $cond: [
-              { $eq: ["$operationInfo.items.approvalStatus", "no"] },
-              1,
-              0,
-            ],
+            $cond: [{ $eq: ["$operationInfo.approvalStatus", "no"] }, 1, 0],
           },
         },
         countWaitingOperations: {
           $sum: {
             $cond: [
-              { $eq: ["$operationInfo.items.approvalStatus", "waiting"] },
+              { $eq: ["$operationInfo.approvalStatus", "waiting"] },
               1,
               0,
             ],
@@ -161,8 +149,8 @@ const handleGetOperationStatistics = async (req, res, next) => {
         totalCostForYesFromFoundation: {
           $sum: {
             $cond: [
-              { $eq: ["$operationInfo.items.approvalStatus", "yes"] },
-              "$operationInfo.items.costFromFoundation",
+              { $eq: ["$operationInfo.approvalStatus", "yes"] },
+              "$operationInfo.costFromFoundation",
               0,
             ],
           },

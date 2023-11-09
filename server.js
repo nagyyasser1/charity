@@ -50,8 +50,8 @@ app.use(errorHandler);
 
 connectDB()
   .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log(`server runing... on port ${process.env.PORT}`);
+    app.listen(process.env.PORT || 5001, () => {
+      console.log(`server runing... on port ${process.env.PORT || 5001}`);
     });
   })
   .catch((error) => {

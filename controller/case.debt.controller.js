@@ -12,13 +12,10 @@ const handleAddDebt = async (req, res, next) => {
     }
 
     if (case_data?.debtInfo === undefined) {
-      case_data.debtInfo = {
-        items: [],
-        totalPrice: 0,
-      };
+      case_data.debtInfo = [];
     }
 
-    let { items } = case_data.debtInfo;
+    let { debtInfo } = case_data;
 
     const {
       approvalStatus,
@@ -58,10 +55,9 @@ const handleAddDebt = async (req, res, next) => {
       file,
     };
 
-    items.push(newDebtItem);
+    debtInfo.push(newDebtItem);
 
-    case_data.debtInfo.items = items;
-    case_data.debtInfo.totalPrice += +req.body.amountFromFoundation;
+    case_data.debtInfo = debtInfo;
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
       new: true,
@@ -110,17 +106,17 @@ const handleGetDebtStatistics = async (req, res, next) => {
       {
         $match: {
           caseType: "debt",
-          "debtInfo.items.approvalStatus": "yes",
-          "debtInfo.items.finished": false,
+          "debtInfo.approvalStatus": "yes",
+          "debtInfo.finished": false,
         },
       },
       {
-        $unwind: "$debtInfo.items",
+        $unwind: "$debtInfo",
       },
       {
         $match: {
-          "debtInfo.items.approvalStatus": "yes",
-          "debtInfo.items.finished": false,
+          "debtInfo.approvalStatus": "yes",
+          "debtInfo.finished": false,
         },
       },
     ];
@@ -129,17 +125,17 @@ const handleGetDebtStatistics = async (req, res, next) => {
       {
         $match: {
           caseType: "debt",
-          "debtInfo.items.approvalStatus": "yes",
-          "debtInfo.items.finished": true,
+          "debtInfo.approvalStatus": "yes",
+          "debtInfo.finished": true,
         },
       },
       {
-        $unwind: "$debtInfo.items",
+        $unwind: "$debtInfo",
       },
       {
         $match: {
-          "debtInfo.items.approvalStatus": "yes",
-          "debtInfo.items.finished": true,
+          "debtInfo.approvalStatus": "yes",
+          "debtInfo.finished": true,
         },
       },
     ];
@@ -152,13 +148,13 @@ const handleGetDebtStatistics = async (req, res, next) => {
     if (dateFilter[comparisonOperator]) {
       currentAggregationPipeline.push({
         $match: {
-          "debtInfo.items.startDate": dateFilter[comparisonOperator],
+          "debtInfo.startDate": dateFilter[comparisonOperator],
         },
       });
 
       finishedAggregationPipeline.push({
         $match: {
-          "debtInfo.items.startDate": dateFilter[comparisonOperator],
+          "debtInfo.startDate": dateFilter[comparisonOperator],
         },
       });
     }
@@ -168,10 +164,10 @@ const handleGetDebtStatistics = async (req, res, next) => {
         _id: null,
         count: { $sum: 1 },
         totalAmountFromFoundation: {
-          $sum: "$debtInfo.items.amountFromFoundation",
+          $sum: "$debtInfo.amountFromFoundation",
         },
         totalPaidFromFoundation: {
-          $sum: "$debtInfo.items.paidFromFoundation",
+          $sum: "$debtInfo.paidFromFoundation",
         },
       },
     });
@@ -181,10 +177,10 @@ const handleGetDebtStatistics = async (req, res, next) => {
         _id: null,
         count: { $sum: 1 },
         totalAmountFromFoundation: {
-          $sum: "$debtInfo.items.amountFromFoundation",
+          $sum: "$debtInfo.amountFromFoundation",
         },
         totalPaidFromFoundation: {
-          $sum: "$debtInfo.items.paidFromFoundation",
+          $sum: "$debtInfo.paidFromFoundation",
         },
       },
     });

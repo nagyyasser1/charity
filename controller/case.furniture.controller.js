@@ -62,12 +62,10 @@ const handleAddFurniture = async (req, res, next) => {
       }
 
       if (case_data?.furnitureInfo === undefined) {
-        case_data.furnitureInfo = {
-          items: [],
-        };
+        case_data.furnitureInfo = [];
       }
 
-      let { items } = case_data.furnitureInfo;
+      let { furnitureInfo } = case_data;
 
       const newFurnitureItem = {
         name,
@@ -77,8 +75,9 @@ const handleAddFurniture = async (req, res, next) => {
         products: validProducts,
         approvalStatus,
       };
-      items.push(newFurnitureItem);
-      case_data.furnitureInfo.items = items;
+
+      furnitureInfo.push(newFurnitureItem);
+      case_data.furnitureInfo = furnitureInfo;
     }
 
     const updated_case = await Case.findByIdAndUpdate(caseId, case_data, {
@@ -138,14 +137,14 @@ const handleGetFurnitureStatistics = async (req, res, next) => {
         },
       },
       {
-        $unwind: "$furnitureInfo.items",
+        $unwind: "$furnitureInfo",
       },
     ];
 
     if (comparisonOperator === "gt") {
       aggregationPipeline.push({
         $match: {
-          "furnitureInfo.items.helpDate": {
+          "furnitureInfo.helpDate": {
             $gt: queryDate,
           },
         },
@@ -153,7 +152,7 @@ const handleGetFurnitureStatistics = async (req, res, next) => {
     } else if (comparisonOperator === "lt") {
       aggregationPipeline.push({
         $match: {
-          "furnitureInfo.items.helpDate": {
+          "furnitureInfo.helpDate": {
             $lt: queryDate,
           },
         },
@@ -170,7 +169,7 @@ const handleGetFurnitureStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$furnitureInfo.items.approvalStatus", "yes"],
+                $eq: ["$furnitureInfo.approvalStatus", "yes"],
               },
               1,
               0,
@@ -181,7 +180,7 @@ const handleGetFurnitureStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$furnitureInfo.items.approvalStatus", "no"],
+                $eq: ["$furnitureInfo.approvalStatus", "no"],
               },
               1,
               0,
@@ -192,7 +191,7 @@ const handleGetFurnitureStatistics = async (req, res, next) => {
           $sum: {
             $cond: [
               {
-                $eq: ["$furnitureInfo.items.approvalStatus", "waiting"],
+                $eq: ["$furnitureInfo.approvalStatus", "waiting"],
               },
               1,
               0,
