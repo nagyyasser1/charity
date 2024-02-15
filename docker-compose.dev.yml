@@ -1,0 +1,12 @@
+version: "3"
+services:
+  charityapi:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    volumes:
+      - ./src:/app/src:ro
+    environment:
+      - NODE_ENV=development
+    command: npm run dev

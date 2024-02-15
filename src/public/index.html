@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welcome To Charity.Org <span>API</span></h1>
+    </header>
+    <main>
+        <h2>Endpoints:</h2>
+        <ul>
+            <li>
+                <a href="#case">baseUrl/api/v1/case</a>
+            </li>
+            <li>
+                <a href="#dep">baseUrl/api/v1/dep</a>
+            </li>
+            <li>
+                <a href="#box">baseUrl/api/v1/box</a>
+            </li>
+        </ul>
+    </main>
+    <section id="case">
+        <div class="head">
+            <h4>Case</h4>
+            <p>Here you can add new cases to you api</p>
+        </div>
+        <div class="content">
+            <div class="method">
+                <h5>Method : Post</h5>
+            </div>
+            <div class="parameter">
+                <h5>Parameter : No Param</h5>
+            </div>
+            <div class="request">
+                <h5>Request body : <button id="btn">toggle</button></h5>
+                <div class="desc" id="desc">
+                    <ul>
+                        <li>ssh : number</li>
+                        <li>name : string</li>
+                        <li>socialStatus : string, valid("poor", "widows", "orphans")</li>
+                        <li>sector : string, valid("foundation", "factory")</li>
+                        <li>approvalStatus : string, valid("yes", "no", "wating")</li>
+                        <li>phone : number</li>
+                        <li>cashBenefits : number</li>
+                        <li>bouns : number *not required!</li>
+                        <li>checkDate : date</li>
+                        <li>startDate : date</li>
+                        <li>birthdate : date</li>
+                        <li>researcher : string</li>
+                        <li>researchOpinion : string</li>
+                        <li>monthlyOutcome : number</li>
+                        <li>monthlyIncome : number</li>
+                        <li>description : string</li>
+                        <li>box : string ,note=> an id of existing box"</li>
+                        <li>boxCount : number</li>
+                        <li>address : {town: string,street: string}</li>
+                        <li>dependent: [{
+                            name: string,<br>
+                            age: number,<br>
+                            gender: string, valid("male", "female"),<br>
+                            birthdate: date,<br>
+                            description: string,<br>
+                            study: bool,<br>
+                            studyLevel: string, valid("primary", "secondary", "high", "university"),<br>
+                            disabled: bool
+                            }]</li>
+                        <li>file : </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="response">
+                <h5>Response : ابقا اطبع متتعبناش معاك</h5>
+            </div>
+        </div>
+    </section>
+    <script>
+        const showHideBtn = document.getElementById("btn")
+        const descSection = document.getElementById("desc")
+
+        showHideBtn.addEventListener('click', (e) => {
+            if (descSection.offsetHeight > 0) {
+                descSection.style.height = 0
+            } else {
+                descSection.style.height = "auto"
+            }
+        }
+        )
+    </script>
+</body>
+
+</html>
